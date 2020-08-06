@@ -1,0 +1,17 @@
+language: c
+
+sudo: required
+
+compiler:
+  - gcc
+
+before_script:
+  - mkdir build
+  - cd build
+  - cmake .. -DBUILD_TESTS=ON
+  - cd ..
+
+script:
+  - cmake --version
+  - cmake --build build
+  - build/test__all -s

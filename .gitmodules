@@ -1,0 +1,9 @@
+[submodule "3rdParty/Catch2"]
+	path = 3rdParty/Catch2
+	url = https://github.com/this-kirke/Catch2
+[submodule "3rdParty/doxygen_dark_theme"]
+	path = 3rdParty/doxygen_dark_theme
+	url = https://github.com/MaJerle/doxygen_dark_theme.git
+[submodule "3rdParty/kirke/kirke"]
+	path = 3rdParty/kirke/kirke
+	url = https://github.com/this-kirke/kirke

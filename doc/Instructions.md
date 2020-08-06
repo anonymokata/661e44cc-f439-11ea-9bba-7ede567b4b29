@@ -1,19 +1,4 @@
-# Word Search
-# Author: Justin Kirkegaard
-
-### This document gives a brief overview of the word search project.  Detailed documentation is hosted by Github Pages [here](https://this-kirke.github.io/kata-word-search-docs/index.html).
-
-## About
-
-## Building
-
-## Usage
-
-## Testing
-
-## Instructions
-
-The instructions provided by Pillar are as follows:
+\page instructions Instructions
 
 Word Search Kata
 ================
