@@ -1,8 +1,15 @@
 \page development_journal Development Journal
+---
+### Thursday August 6, 2020
+### 17:25
+
+Now it's time to begin development on libword_search. This library will define the structures required to represent a word search puzzle and its solution.  I'm going to start small, defining the structures and new/free/equals for each.
+
+Added type WordSearch__Direction. This is an enumerator, defining the cardinal and intermediate directions. These are each of the directions in which a word can be oriented on the grid.
 
 ---
 ### Thursday August 6, 2020
-### 17:13 CDT
+### 15:13 CDT
 
 Ok, everything seems to be consolidated. We have all the dependencies we need with Catch2 and libkirke, and we have a project structure which builds all the local targets including tests. Going to push the current state, and then begin working on libword_search.
 
