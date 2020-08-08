@@ -51,7 +51,7 @@ char word_search__grid__contains( WordSearch__Grid const *grid, WordSearch__Grid
  *  \param grid A pointer to WordSearch__Grid from which the entry should be retrieved.
  *  \param coordinates The WordSearch__GridLocation at which the entry to be retrieved resides.
  *  \returns The character value stored at the specified WordSearch__GridCoordinates in the specified
- *  WordSearch__Grid
+ *  WordSearch__Grid.  If the grid coordinates are not on the grid, then returns the NULL character, '\0'.
  */
 char word_search__grid__entry( 
     WordSearch__Grid const *grid,

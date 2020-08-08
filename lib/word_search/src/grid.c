@@ -18,5 +18,9 @@ char word_search__grid__entry(
     WordSearch__Grid const *grid,
     WordSearch__GridCoordinates const *coordinates
 ){
+    if( word_search__grid__contains( grid, coordinates ) ){
+        return slice__index( &grid->entries, char, coordinates->row * grid->width + coordinates->column );
+    }
+
     return '\0';
 }
