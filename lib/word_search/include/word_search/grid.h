@@ -3,7 +3,10 @@
 
 // 3rdParty Includes
 #include "kirke/macros.h"
-#include "kirke/slice.h"
+#include "kirke/auto_slice.h"
+
+// Internal Includes
+#include "word_search/grid_coordinates.h"
 
 BEGIN_DECLARATIONS
 
@@ -30,7 +33,7 @@ typedef struct WordSearch__Grid {
     /** The height of the grid, in entries */
     unsigned long height;
     /** 
-     *  A pointer to a slice containing an array of characters. Slice length should always be 
+     *  A pointer to a Slice containing an array of characters. Slice length should always be 
      *  width * height. The grid is laid out in row-major format, that is entries are 0-indexed 
      *  from the top-left corner of the grid, and can be accessed by (row, column) coordinate pair. 
      *  Accessing individual entries by (row, column) coordinate pair can be acheived by calling 
@@ -39,6 +42,8 @@ typedef struct WordSearch__Grid {
      */
     Slice entries;
 } WordSearch__Grid;
+
+char word_search__grid__contains( WordSearch__Grid const *grid, WordSearch__GridCoordinates const *coordinates );
 
 /*
  *  @} // group word_search__grid
