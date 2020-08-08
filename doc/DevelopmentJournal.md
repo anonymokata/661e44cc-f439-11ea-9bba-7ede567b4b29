@@ -7,6 +7,8 @@ Now it's time to begin development on libword_search. This library will define t
 
 Added type WordSearch__Direction. This is an enumerator, defining the cardinal and intermediate directions. These are each of the directions in which a word can be oriented on the grid.
 
+Added type WordSearch__GridCoordinates. This is a structure containing row and column fields, zero-indexed from the top-left or NorthWest corner of the word search puzzle grid. 
+
 ---
 ### Thursday August 6, 2020
 ### 15:13 CDT
