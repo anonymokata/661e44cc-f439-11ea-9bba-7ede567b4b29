@@ -13,3 +13,10 @@ char word_search__grid__contains( WordSearch__Grid const *grid, WordSearch__Grid
 
     return 0;
 }
+
+char word_search__grid__entry( 
+    WordSearch__Grid const *grid,
+    WordSearch__GridCoordinates const *coordinates
+){
+    return '\0';
+}

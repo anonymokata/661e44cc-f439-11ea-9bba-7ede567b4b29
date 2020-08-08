@@ -67,3 +67,19 @@ TEST_CASE_METHOD( WordSearch__Grid__TestFixture, "word_search__grid__contains", 
     current_coordinates = { .row =  0, .column =  15 };
     REQUIRE( word_search__grid__contains( &grid, &current_coordinates ) == 0 );
 }
+
+TEST_CASE_METHOD( WordSearch__Grid__TestFixture, "word_search__grid__entry", "[word_search]" ){
+    WordSearch__GridCoordinates current_coordinates;
+
+    current_coordinates = { .row = 0, .column = 0 };
+    REQUIRE( word_search__grid__entry( &grid, &current_coordinates ) == 'a' );
+
+    current_coordinates = { .row = 0, .column = 1 };
+    REQUIRE( word_search__grid__entry( &grid, &current_coordinates ) == 'b' );
+
+    current_coordinates = { .row = 1, .column = 0 };
+    REQUIRE( word_search__grid__entry( &grid, &current_coordinates ) == 'c' );
+
+    current_coordinates = { .row = 1, .column = 1 };
+    REQUIRE( word_search__grid__entry( &grid, &current_coordinates ) == 'd' );
+}
