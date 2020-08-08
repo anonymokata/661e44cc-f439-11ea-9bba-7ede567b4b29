@@ -13,6 +13,8 @@ Added type WordSearch__GridVector. This is a structure containing magnitude and 
 
 Added type WordSearch__GridSequence. This is a structure containing a start field of type WordSearch__GridCoordinates and a span field of type WordSearch__GridVector. Together these fields identify a linear sequence of entries in the word search grid. 
 
+Added type WordSearch__Grid. This is a structure containing fields for width, height, and entries.  Entries is Slice containing (width * height) character values, packed and arranged in row-major order.
+
 ---
 ### Thursday August 6, 2020
 ### 15:13 CDT
