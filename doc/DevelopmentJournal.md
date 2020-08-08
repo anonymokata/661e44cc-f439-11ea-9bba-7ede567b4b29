@@ -9,6 +9,8 @@ Added type WordSearch__Direction. This is an enumerator, defining the cardinal a
 
 Added type WordSearch__GridCoordinates. This is a structure containing row and column fields, zero-indexed from the top-left or NorthWest corner of the word search puzzle grid. 
 
+Added type WordSearch__GridVector. This is a structure containing magnitude and direction fields.
+
 ---
 ### Thursday August 6, 2020
 ### 15:13 CDT
