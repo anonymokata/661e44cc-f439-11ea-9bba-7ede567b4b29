@@ -24,3 +24,12 @@ char word_search__grid__entry(
 
     return '\0';
 }
+
+char word_search__grid__lookup_sequence_entry( 
+    WordSearch__Grid const *grid,
+    WordSearch__GridSequence const* sequence,
+    unsigned long index,
+    char* out_entry
+){
+    return 0;
+}

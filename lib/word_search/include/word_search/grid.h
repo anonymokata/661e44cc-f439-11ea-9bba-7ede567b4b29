@@ -3,10 +3,11 @@
 
 // 3rdParty Includes
 #include "kirke/macros.h"
-#include "kirke/auto_slice.h"
+#include "kirke/slice.h"
 
 // Internal Includes
 #include "word_search/grid_coordinates.h"
+#include "word_search/grid_sequence.h"
 
 BEGIN_DECLARATIONS
 
@@ -56,6 +57,25 @@ char word_search__grid__contains( WordSearch__Grid const *grid, WordSearch__Grid
 char word_search__grid__entry( 
     WordSearch__Grid const *grid,
     WordSearch__GridCoordinates const *coordinates
+);
+
+/**
+ *  \brief Given a sequence and an index into that sequence, this method looks up the value of the value of 
+ *  the corresponding grid entry.
+ *  \param grid A pointer to the WordSearch__Grid containing the desired entry.
+ *  \param sequence A pointer to the WordSearch__GridSequence describing desired entry sequence.  
+ *  \param index The index into the sequence of the desired entry.
+ *  \param out_entry An out parameter. Upon successful completion, this will be assigned to the value of the
+ *  desired entry.
+ *  \returns 1 if the lookup was successful, and 0 otherwise. The lookup can fail if either the index is
+ *  greater than or equal to sequence->span.magnitude, or if the corresponding entry is not contained by the
+ *  grid.
+ */
+char word_search__grid__lookup_sequence_entry( 
+    WordSearch__Grid const *grid,
+    WordSearch__GridSequence const* sequence,
+    unsigned long index,
+    char* out_entry
 );
 
 /*
