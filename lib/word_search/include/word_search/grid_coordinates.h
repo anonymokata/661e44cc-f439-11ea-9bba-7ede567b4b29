@@ -4,6 +4,9 @@
 // 3rdParty Includes
 #include "kirke/macros.h"
 
+// Internal Includes
+#include "word_search/grid_vector.h"
+
 BEGIN_DECLARATIONS
 
 /**
@@ -26,6 +29,17 @@ typedef struct WordSearch__GridCoordinates {
      */
     long column;
 } WordSearch__GridCoordinates;
+
+/**
+ *  \brief Translates the specified coordinates by the specified vector, returning the translated coordinates.
+ *  \param coordinates The coordinates which will be translated
+ *  \param vector The WordSearch__GridVector describing the translation operation
+ *  \returns The translated coordinates.
+ */
+WordSearch__GridCoordinates word_search__grid_coordinates__translate( 
+    WordSearch__GridCoordinates coordinates,
+    WordSearch__GridVector vector
+);
 
 /**
  *  \brief Compares two WordSearch__GridCoordinates for equality
