@@ -31,5 +31,22 @@ char word_search__grid__lookup_sequence_entry(
     unsigned long index,
     char* out_entry
 ){
-    return 0;
+    if( index >= sequence->span.magnitude ){
+        return 0;
+    }
+
+    WordSearch__GridCoordinates current_coordinates = word_search__grid_coordinates__translate(
+        sequence->start,
+        (WordSearch__GridVector) { 
+            .magnitude = index,
+            .direction = sequence->span.direction
+        }
+    );
+
+    if( word_search__grid__contains( grid, &current_coordinates ) == 0 ){
+        return 0;
+    }
+
+    *out_entry = word_search__grid__entry( grid, &current_coordinates );
+    return 1;
 }
