@@ -2,7 +2,50 @@
 #include "word_search/grid_coordinates.h"
 
 WordSearch__GridCoordinates word_search__grid_coordinates__translate( WordSearch__GridCoordinates coordinates, WordSearch__GridVector vector ){
-    return coordinates;
+    switch( vector.direction ){
+        case WordSearch__Direction__East:
+            return (WordSearch__GridCoordinates) {
+                .row = coordinates.row,
+                .column = coordinates.column + vector.magnitude
+            };
+        case WordSearch__Direction__SouthEast:
+            return (WordSearch__GridCoordinates) {
+                .row = coordinates.row + vector.magnitude,
+                .column = coordinates.column + vector.magnitude
+            };
+        case WordSearch__Direction__South:
+            return (WordSearch__GridCoordinates) {
+                .row = coordinates.row + vector.magnitude,
+                .column = coordinates.column
+            };
+        case WordSearch__Direction__SouthWest:
+            return (WordSearch__GridCoordinates) {
+                .row = coordinates.row + vector.magnitude,
+                .column = coordinates.column - vector.magnitude
+            };
+        case WordSearch__Direction__West:
+            return (WordSearch__GridCoordinates) {
+                .row = coordinates.row,
+                .column = coordinates.column - vector.magnitude
+            };
+        case WordSearch__Direction__NorthWest:
+            return (WordSearch__GridCoordinates) {
+                .row = coordinates.row - vector.magnitude,
+                .column = coordinates.column - vector.magnitude
+            };
+        case WordSearch__Direction__North:
+            return (WordSearch__GridCoordinates) {
+                .row = coordinates.row - vector.magnitude,
+                .column = coordinates.column
+            };
+        case WordSearch__Direction__NorthEast:
+            return (WordSearch__GridCoordinates) {
+                .row = coordinates.row - vector.magnitude,
+                .column = coordinates.column + vector.magnitude
+            };
+        default:
+            return coordinates;
+    }
 }
 
 char word_search__grid_coordinates__equals( 
