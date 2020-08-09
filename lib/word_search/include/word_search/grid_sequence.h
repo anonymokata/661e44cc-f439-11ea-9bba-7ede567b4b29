@@ -44,16 +44,6 @@ char word_search__grid_sequence__equals(
 );
 
 /**
- *  \brief This method calculates and returns the coordinates corresponding to the given position of a WordSearch__GridSequence.
- *  \param sequence A pointer to the WordSearch__GridSequence
- *  \param index The index of the entry in the sequence for which the coordinates will be returned. 
- *  \param out_coordinates An out parameter, this will be filled with the coordinates of the entry at the specified index.
- *  \returns 1 if the lookup was successful, and 0 if it was not. This operation can fail if the supplied index is greater than
- *  or equal to sequence->span.magnitude. 
- */
-char word_search__grid_sequence__coordinates_of( WordSearch__GridSequence* sequence, unsigned long index, WordSearch__GridCoordinates* out_coordinates );
-
-/**
  *  @} // group word_search__grid_coordinates
  */
 
