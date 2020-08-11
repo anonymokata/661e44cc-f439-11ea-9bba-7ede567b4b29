@@ -1,6 +1,18 @@
 // Internal Includes
 #include "word_search/grid.h"
 
+void word_search__grid__init( WordSearch__Grid* grid, Allocator* allocator, unsigned long width, unsigned long height ){
+    grid->width = width;
+    grid->height = height;
+    slice__init( &grid->entries, allocator, sizeof( char ), width * height );
+}
+
+void word_search__grid__clear( WordSearch__Grid* grid, Allocator* allocator ){
+    grid->width = 0;
+    grid->height = 0;
+    slice__clear( &grid->entries, allocator );
+}
+
 char word_search__grid__contains( WordSearch__Grid const *grid, WordSearch__GridCoordinates const *coordinates ){
     if( 
         coordinates->row >= 0 &&

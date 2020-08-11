@@ -19,6 +19,9 @@ BEGIN_DECLARATIONS
  *  @{
  */
 
+// Forward Declarations
+typedef struct Allocator Allocator;
+
 /** 
  *  A structure defining a word search puzzle grid.
  *  \brief This structure contains metadata describing the grid, such as its width and height, 
@@ -44,6 +47,32 @@ typedef struct WordSearch__Grid {
     Slice entries;
 } WordSearch__Grid;
 
+/**
+ *  \brief This method initializes a WordSearch__Grid structure. After initialization, memory is allocated for storage of
+ *  entries in the grid, but no entries have been added.  To add entries to the grid, call 
+ *      auto_slice__append_element( &grid->entries, <entry_value> );
+ *  \param grid A pointer to the WordSearch__Grid to be initialized.
+ *  \param allocator The allocator which will be used for managing memory controlled by the grid.
+ *  \param width The width of the grid, in entries.
+ *  \param height The height of the grid, in entries.
+ */
+void word_search__grid__init( WordSearch__Grid* grid, Allocator* allocator, unsigned long width, unsigned long height );
+
+/** 
+ *  \brief This method clears a previously-initialized WordSearch__Grid structure. All memory controlled by the grid will be 
+ *  released, but the grid structure itself will not be freed.
+ *  \param grid A pointer to the WordSearch__Grid to be cleared.
+ *  \param allocator A pointer to the allocator used to manage memory controlled by the grid.
+ */
+void word_search__grid__clear( WordSearch__Grid* grid, Allocator* allocator );
+
+/**
+ *  \brief This method determines whether the given WordSearch__GridCoordinates reside within the grid.
+ *  \param grid The grid upon which the supplied WordSearch__GridCoordinates will be tested.
+ *  \param coordinates The WordSearch__GridCoordinates which will be tested.
+ *  \returns 1 if \p coordinates does reside within the grid. That is, coordinates->row < grid->height and 
+ *  coordinates->column < grid->width.  Returns 0 otherwise.
+ */
 char word_search__grid__contains( WordSearch__Grid const *grid, WordSearch__GridCoordinates const *coordinates );
 
 /**
@@ -54,10 +83,7 @@ char word_search__grid__contains( WordSearch__Grid const *grid, WordSearch__Grid
  *  \returns The character value stored at the specified WordSearch__GridCoordinates in the specified
  *  WordSearch__Grid.  If the grid coordinates are not on the grid, then returns the NULL character, '\0'.
  */
-char word_search__grid__entry( 
-    WordSearch__Grid const *grid,
-    WordSearch__GridCoordinates const *coordinates
-);
+char word_search__grid__entry( WordSearch__Grid const *grid, WordSearch__GridCoordinates const *coordinates );
 
 /**
  *  \brief Given a sequence and an index into that sequence, this method looks up the value of the value of 

@@ -1,9 +1,42 @@
 // 3rdParty Includes
 #include "catch2/catch.hpp"
 #include "kirke/slice.h"
+#include "kirke/system_allocator.h"
 
 // Internal Includes
 #include "word_search/grid.h"
+
+TEST_CASE( "word_search__grid__init_and_clear", "[grid]" ){
+    const unsigned long GRID_WIDTH = 5;
+    const unsigned long GRID_HEIGHT = 10;
+
+    SystemAllocator system_allocator;
+    system_allocator__init( &system_allocator, NULL );
+
+    WordSearch__Grid grid;
+    word_search__grid__init( &grid, system_allocator.allocator, GRID_WIDTH, GRID_HEIGHT );
+
+    REQUIRE( grid.width == GRID_WIDTH ); 
+    REQUIRE( grid.height == GRID_HEIGHT );
+
+    REQUIRE( grid.entries.data != NULL ); 
+    REQUIRE( grid.entries.length == 0 );
+    REQUIRE( grid.entries.element_size == sizeof( char ) ); 
+    REQUIRE( grid.entries.capacity == GRID_WIDTH * GRID_HEIGHT );  
+
+    word_search__grid__clear( &grid, system_allocator.allocator );
+
+    REQUIRE( grid.width == 0 ); 
+    REQUIRE( grid.height == 0 );
+
+    REQUIRE( grid.entries.data == NULL ); 
+    REQUIRE( grid.entries.length == 0 );
+    REQUIRE( grid.entries.element_size == 0 ); 
+    REQUIRE( grid.entries.capacity == 0 );  
+
+    system_allocator__deinit( &system_allocator );
+}
+
 
 class WordSearch__Grid__TestFixture {
     protected:
