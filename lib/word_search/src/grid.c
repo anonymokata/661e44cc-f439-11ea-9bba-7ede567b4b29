@@ -62,3 +62,11 @@ char word_search__grid__lookup_sequence_entry(
     *out_entry = word_search__grid__entry( grid, &current_coordinates );
     return 1;
 }
+
+char word_search__grid__sequence_matches_word(
+    WordSearch__Grid const *grid,
+    WordSearch__GridSequence const *sequence,
+    Slice const *word
+){
+    return 0;
+}

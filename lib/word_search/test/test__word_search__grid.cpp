@@ -1,5 +1,9 @@
+// System Includes
+#include <string.h>
+
 // 3rdParty Includes
 #include "catch2/catch.hpp"
+
 #include "kirke/slice.h"
 #include "kirke/system_allocator.h"
 
@@ -40,15 +44,26 @@ TEST_CASE( "word_search__grid__init_and_clear", "[grid]" ){
 
 class WordSearch__Grid__TestFixture {
     protected:
+
         WordSearch__Grid__TestFixture(){
-            grid = {
-                .width = GRID_DIM,
-                .height = GRID_DIM,
-                .entries = slice__init( GRID.data(), GRID.size(), sizeof( char ) )
-            };
+            
+            system_allocator__init( &system_allocator, NULL );
+
+            word_search__grid__init( &grid, system_allocator.allocator, GRID_DIM, GRID_DIM );
+            memcpy( slice__data( &grid.entries, char ), GRID.data(), GRID.size() );
+ 
+            slice__init( &words, system_allocator.allocator, sizeof( Slice ), WORDS.size() );
+            for( size_t word_index = 0; word_index < WORDS.size(); word_index++ ){
+                Slice word = slice__index( &words, Slice, word_index );
+                slice__init( &word, system_allocator.allocator, sizeof( char ), WORDS[ word_index ].length() );
+                memcpy( slice__data( &word, char ), WORDS[ word_index ].c_str(), WORDS[ word_index ].length() );
+            }
         }
 
-        ~WordSearch__Grid__TestFixture(){}
+        ~WordSearch__Grid__TestFixture(){
+            word_search__grid__clear( &grid, system_allocator.allocator );
+            slice__clear__full( &words, system_allocator.allocator, (FreeFunction) slice__clear );
+        }
 
         const unsigned long GRID_DIM = 15;
 
@@ -70,10 +85,24 @@ class WordSearch__Grid__TestFixture {
             'K', 'Y', 'L', 'B', 'Q', 'Q', 'P', 'M', 'D', 'F', 'C', 'K', 'E', 'A', 'B'
         };
 
+        const std::vector<std::string> WORDS = {
+            "BONES",
+            "KHAN",
+            "KIRK",
+            "SCOTTY",
+            "SPOCK",
+            "SULU",
+            "UHURA"
+        };
+
         WordSearch__Grid grid;
+
+        SystemAllocator system_allocator;
+        Slice words;
 };
 
-TEST_CASE_METHOD( WordSearch__Grid__TestFixture, "word_search__grid__contains", "[word_search]" ){
+
+TEST_CASE_METHOD( WordSearch__Grid__TestFixture, "word_search__grid__contains", "[grid]" ){
     WordSearch__GridCoordinates current_coordinates;
 
     current_coordinates = { .row = 0, .column = 0 };
@@ -101,7 +130,7 @@ TEST_CASE_METHOD( WordSearch__Grid__TestFixture, "word_search__grid__contains", 
     REQUIRE( word_search__grid__contains( &grid, &current_coordinates ) == 0 );
 }
 
-TEST_CASE_METHOD( WordSearch__Grid__TestFixture, "word_search__grid__entry", "[word_search]" ){
+TEST_CASE_METHOD( WordSearch__Grid__TestFixture, "word_search__grid__entry", "[grid]" ){
     WordSearch__GridCoordinates current_coordinates;
 
     current_coordinates = { .row = 0, .column = 0 };
@@ -152,4 +181,97 @@ TEST_CASE_METHOD( WordSearch__Grid__TestFixture, "word_search__grid__lookup_sequ
     // we still get the desired value.
     REQUIRE( word_search__grid__lookup_sequence_entry( &grid, &sequence, 1, &entry ) );
     REQUIRE( entry == GRID[ 0 ] );
+}
+
+
+TEST_CASE_METHOD( WordSearch__Grid__TestFixture, "word_search__grid__sequence_matches_word", "[grid]" ){
+    WordSearch__GridSequence sequences[] = {
+        // BONES
+        {
+            .start = {
+                .row = 6,
+                .column = 0
+            },
+            .span = {
+                .magnitude = 5,
+                .direction = WordSearch__Direction__South
+            }
+        },
+        // KHAN
+        {
+            .start = {
+                .row = 9,
+                .column = 5
+            },
+            .span = {
+                .magnitude = 4,
+                .direction = WordSearch__Direction__North
+            }
+        },
+        // KIRK
+        {
+            .start = {
+                .row = 7,
+                .column = 4
+            },
+            .span = {
+                .magnitude = 4,
+                .direction = WordSearch__Direction__West
+            }
+        },
+        // SCOTTY
+        {
+            .start = {
+                .row = 5,
+                .column = 0
+            },
+            .span = {
+                .magnitude = 6,
+                .direction = WordSearch__Direction__SouthEast
+            }
+        },
+        // SPOCK
+        {
+            .start = {
+                .row = 1,
+                .column = 2
+            },
+            .span = {
+                .magnitude = 5,
+                .direction = WordSearch__Direction__SouthEast
+            }
+        },
+        // SULU
+        {
+            .start = {
+                .row = 3,
+                .column = 3
+            },
+            .span = {
+                .magnitude = 4,
+                .direction = WordSearch__Direction__NorthWest
+            }
+        },
+        // UHURA
+        {
+            .start = {
+                .row = 0,
+                .column = 4
+            },
+            .span = {
+                .magnitude = 5,
+                .direction = WordSearch__Direction__SouthWest
+            }
+        }
+    };
+
+    for( unsigned long word_index = 0; word_index < words.length; word_index++ ){
+        REQUIRE( 
+            word_search__grid__sequence_matches_word( 
+                &grid,
+                &sequences[ word_index ],
+                &slice__index( &words, Slice, word_index )
+            ) == 1
+        );
+    }
 }
