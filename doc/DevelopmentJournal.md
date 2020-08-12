@@ -2,6 +2,18 @@
 
 ---
 
+### Wednesday August 12, 2020
+
+At this point, I believe I have all of the basic types I need defined in libword_search. Now it's time to work on kata_word_search, the specific solver implementation.
+
+I'll start with the user stores, i.e. "As the Puzzle Solver, I want to search horizontally so that I can find words on the X axis"
+
+Added type KataWordSearch__Solution. This is the structure we'll use to return the disposition of the words we searched for.
+* The method kata_word_search__solution__equals tests two KataWordSearch__Solution structures for equality.
+
+
+---
+
 ### Thursday August 6, 2020
 ### 17:25
 

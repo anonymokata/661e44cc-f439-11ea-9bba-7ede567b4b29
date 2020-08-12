@@ -18,6 +18,7 @@ add_subdirectory( 3rdParty/Catch2 )
 add_subdirectory( 3rdParty/kirke )
 
 add_subdirectory( lib/word_search )
+add_subdirectory( lib/kata_word_search )
 add_subdirectory( exec/kata_word_search )
 
 if( BUILD_TESTS )
@@ -56,6 +57,8 @@ if( BUILD_DOCUMENTATION )
 
         doxygen_add_docs(
             docs
+            lib
+            exec
             doc
             ALL
         )
