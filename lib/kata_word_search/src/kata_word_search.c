@@ -34,3 +34,12 @@ char kata_word_search__find_word(
 
     return 0;
 }
+
+char kata_word_search__search( 
+    Slice* words, 
+    WordSearch__Grid* grid,
+    WordSearch__Direction direction,
+    Slice* out_solutions
+){
+    return 0;
+}

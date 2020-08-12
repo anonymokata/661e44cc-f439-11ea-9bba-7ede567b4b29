@@ -39,6 +39,23 @@ char kata_word_search__find_word(
 );
 
 /**
+ *  \brief Searches the given grid for the given words in the given direction.
+ *  \param words A list of the words to be found in the \p grid. This is a pointer to a Slice<Slice<char>>
+ *  \param grid The grid in which to search for the words contained in \p words.
+ *  \param direction The direction in which to search.
+ *  \param out_solutions A pointer to a pre-allocated Slice<KataWordSearch__Solution>. The capacity should be equal to 
+ *  the length of \p words.
+ *  \returns 1 if the search was completed successfully, 0 otherwise.  The search can fail if \p out_solutions is NULL or
+ *  lacks the required capacity to hold solutions for every word.
+ */
+char kata_word_search__search( 
+    Slice* words, 
+    WordSearch__Grid* grid,
+    WordSearch__Direction direction,
+    Slice* out_solutions
+);
+
+/**
  *  @} // group kata_word_search
  */
 
