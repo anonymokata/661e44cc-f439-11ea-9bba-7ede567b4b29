@@ -53,16 +53,41 @@ class WordSearch__Grid__TestFixture {
             memcpy( slice__data( &grid.entries, char ), GRID.data(), GRID.size() );
  
             slice__init( &words, system_allocator.allocator, sizeof( Slice ), WORDS.size() );
+
             for( size_t word_index = 0; word_index < WORDS.size(); word_index++ ){
-                Slice word = slice__index( &words, Slice, word_index );
-                slice__init( &word, system_allocator.allocator, sizeof( char ), WORDS[ word_index ].length() );
-                memcpy( slice__data( &word, char ), WORDS[ word_index ].c_str(), WORDS[ word_index ].length() );
+                slice__init( 
+                    &slice__index( &words, Slice, word_index ),
+                    system_allocator.allocator,
+                    sizeof( char ),
+                    WORDS[ word_index ].length()
+                );
+
+                memcpy( 
+                    slice__data( 
+                        &slice__index( &words, Slice, word_index ),
+                        char 
+                    ),
+                    WORDS[ word_index ].c_str(),
+                    WORDS[ word_index ].length()
+                );
+
+                slice__index( &words, Slice, word_index ).length = WORDS[ word_index ].length();                
+
+                words.length += 1;
             }
         }
 
         ~WordSearch__Grid__TestFixture(){
             word_search__grid__clear( &grid, system_allocator.allocator );
-            slice__clear__full( &words, system_allocator.allocator, (FreeFunction) slice__clear );
+
+            for( unsigned long word_index = 0; word_index < words.length; word_index++ ){
+                slice__clear( 
+                    &slice__index( &words, Slice, word_index ),
+                    system_allocator.allocator
+                );
+            }
+
+            slice__clear( &words, system_allocator.allocator );
         }
 
         const unsigned long GRID_DIM = 15;
@@ -227,7 +252,7 @@ TEST_CASE_METHOD( WordSearch__Grid__TestFixture, "word_search__grid__sequence_ma
             },
             .span = {
                 .magnitude = 6,
-                .direction = WordSearch__Direction__SouthEast
+                .direction = WordSearch__Direction__East
             }
         },
         // SPOCK

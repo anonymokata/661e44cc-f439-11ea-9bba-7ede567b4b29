@@ -68,5 +68,22 @@ char word_search__grid__sequence_matches_word(
     WordSearch__GridSequence const *sequence,
     Slice const *word
 ){
-    return 0;
+    if( sequence->span.magnitude != word->length ){
+        return 0;
+    }
+
+    for( unsigned long character_index = 0; character_index < word->length; character_index++ ){
+        char entry;
+        if( word_search__grid__lookup_sequence_entry( grid, sequence, character_index, &entry ) == 0 ){
+            return 0;
+        }
+
+        char letter = slice__index( word, char, character_index );
+
+        if( entry != letter ){
+            return 0;
+        }
+    }
+
+    return 1;
 }
