@@ -4,13 +4,14 @@
 // 3rdParty Includes
 #include "catch2/catch.hpp"
 
+#include "kirke/auto_slice.h"
 #include "kirke/slice.h"
 #include "kirke/system_allocator.h"
 
 // Internal Includes
 #include "word_search/grid.h"
 
-TEST_CASE( "word_search__grid__init_and_clear", "[grid]" ){
+TEST_CASE( "word_search__grid__init_and_clear", "[word_search__grid]" ){
     const unsigned long GRID_WIDTH = 5;
     const unsigned long GRID_HEIGHT = 10;
 
@@ -52,42 +53,31 @@ class WordSearch__Grid__TestFixture {
             word_search__grid__init( &grid, system_allocator.allocator, GRID_DIM, GRID_DIM );
             memcpy( slice__data( &grid.entries, char ), GRID.data(), GRID.size() );
  
-            slice__init( &words, system_allocator.allocator, sizeof( Slice ), WORDS.size() );
+            auto_slice__init( &words, system_allocator.allocator, sizeof( Slice ), WORDS.size() );
 
             for( size_t word_index = 0; word_index < WORDS.size(); word_index++ ){
-                slice__init( 
-                    &slice__index( &words, Slice, word_index ),
-                    system_allocator.allocator,
-                    sizeof( char ),
-                    WORDS[ word_index ].length()
-                );
-
-                memcpy( 
-                    slice__data( 
-                        &slice__index( &words, Slice, word_index ),
-                        char 
-                    ),
-                    WORDS[ word_index ].c_str(),
-                    WORDS[ word_index ].length()
-                );
-
-                slice__index( &words, Slice, word_index ).length = WORDS[ word_index ].length();                
-
-                words.length += 1;
+                Slice word;
+                slice__init( &word, system_allocator.allocator, sizeof( char ), WORDS[ word_index ].length() );
+                memcpy( slice__data( &word, char ), WORDS[ word_index ].c_str(), WORDS[ word_index ].length() );
+                word.length = WORDS[ word_index ].length();                
+               
+                auto_slice__append_element( &words, word );
             }
         }
 
         ~WordSearch__Grid__TestFixture(){
             word_search__grid__clear( &grid, system_allocator.allocator );
 
-            for( unsigned long word_index = 0; word_index < words.length; word_index++ ){
+            for( unsigned long word_index = 0; word_index < words.slice.length; word_index++ ){
                 slice__clear( 
-                    &slice__index( &words, Slice, word_index ),
+                    &slice__index( &words.slice, Slice, word_index ),
                     system_allocator.allocator
                 );
             }
 
-            slice__clear( &words, system_allocator.allocator );
+            auto_slice__clear( &words );
+
+            system_allocator__deinit( &system_allocator );
         }
 
         const unsigned long GRID_DIM = 15;
@@ -123,11 +113,11 @@ class WordSearch__Grid__TestFixture {
         WordSearch__Grid grid;
 
         SystemAllocator system_allocator;
-        Slice words;
+        AutoSlice words;
 };
 
 
-TEST_CASE_METHOD( WordSearch__Grid__TestFixture, "word_search__grid__contains", "[grid]" ){
+TEST_CASE_METHOD( WordSearch__Grid__TestFixture, "word_search__grid__contains", "[word_search__grid]" ){
     WordSearch__GridCoordinates current_coordinates;
 
     current_coordinates = { .row = 0, .column = 0 };
@@ -155,7 +145,7 @@ TEST_CASE_METHOD( WordSearch__Grid__TestFixture, "word_search__grid__contains", 
     REQUIRE( word_search__grid__contains( &grid, &current_coordinates ) == 0 );
 }
 
-TEST_CASE_METHOD( WordSearch__Grid__TestFixture, "word_search__grid__entry", "[grid]" ){
+TEST_CASE_METHOD( WordSearch__Grid__TestFixture, "word_search__grid__entry", "[word_search__grid]" ){
     WordSearch__GridCoordinates current_coordinates;
 
     current_coordinates = { .row = 0, .column = 0 };
@@ -177,7 +167,7 @@ TEST_CASE_METHOD( WordSearch__Grid__TestFixture, "word_search__grid__entry", "[g
     REQUIRE( word_search__grid__entry( &grid, &current_coordinates ) == '\0' );
 }
 
-TEST_CASE_METHOD( WordSearch__Grid__TestFixture, "word_search__grid__lookup_sequence_entry", "[grid]" ){
+TEST_CASE_METHOD( WordSearch__Grid__TestFixture, "word_search__grid__lookup_sequence_entry", "[word_search__grid]" ){
     WordSearch__GridSequence sequence = {
         .start = {
             .row = 0,
@@ -209,7 +199,7 @@ TEST_CASE_METHOD( WordSearch__Grid__TestFixture, "word_search__grid__lookup_sequ
 }
 
 
-TEST_CASE_METHOD( WordSearch__Grid__TestFixture, "word_search__grid__sequence_matches_word", "[grid]" ){
+TEST_CASE_METHOD( WordSearch__Grid__TestFixture, "word_search__grid__sequence_matches_word", "[word_search__grid]" ){
     WordSearch__GridSequence sequences[] = {
         // BONES
         {
@@ -290,12 +280,12 @@ TEST_CASE_METHOD( WordSearch__Grid__TestFixture, "word_search__grid__sequence_ma
         }
     };
 
-    for( unsigned long word_index = 0; word_index < words.length; word_index++ ){
+    for( unsigned long word_index = 0; word_index < words.slice.length; word_index++ ){
         REQUIRE( 
             word_search__grid__sequence_matches_word( 
                 &grid,
                 &sequences[ word_index ],
-                &slice__index( &words, Slice, word_index )
+                &slice__index( &words.slice, Slice, word_index )
             ) == 1
         );
     }

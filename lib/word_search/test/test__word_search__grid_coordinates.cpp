@@ -4,7 +4,7 @@
 // Internal Includes
 #include "word_search/grid_coordinates.h"
 
-TEST_CASE( "word_search__grid_coordinates__equals", "[grid_coordinates]" ){
+TEST_CASE( "word_search__grid_coordinates__equals", "[word_search__grid_coordinates]" ){
     WordSearch__GridCoordinates first = { 
         .row = 11,
         .column = 4
@@ -19,7 +19,7 @@ TEST_CASE( "word_search__grid_coordinates__equals", "[grid_coordinates]" ){
     REQUIRE( word_search__grid_coordinates__equals( &first, &second ) == 0 );
 }
 
-TEST_CASE( "word_search__grid_coordinates__translate", "[grid_coordinates]" ){
+TEST_CASE( "word_search__grid_coordinates__translate", "[word_search__grid_coordinates]" ){
     WordSearch__GridCoordinates coordinates, expected_coordinates;
     WordSearch__GridVector translation;
     

@@ -8,6 +8,7 @@ BEGIN_DECLARATIONS
 
 /**
  *  \file word_search/direction.h
+ *  \addtogroup word_search Word Search
  *  @{
  *  \defgroup word_search__direction WordSearch__Direction
  *  @{
@@ -45,6 +46,7 @@ typedef enum WordSearch__Direction {
 
 /*
  *  @} group word_search__direction
+ *  @} // group word_search
  */
 
 END_DECLARATIONS

@@ -1,5 +1,7 @@
 \page development_journal Development Journal
+
 ---
+
 ### Thursday August 6, 2020
 ### 17:25
 
@@ -9,11 +11,24 @@ Added type WordSearch__Direction. This is an enumerator, defining the cardinal a
 
 Added type WordSearch__GridCoordinates. This is a structure containing row and column fields, zero-indexed from the top-left or NorthWest corner of the word search puzzle grid. 
 
+* The method word_search__grid_coordinates__equals tests two WordSearch__GridCoordinates structures for equality
+* The method word_search__grid_coordinates__translate translates a pair of coordinates by a vector
+
 Added type WordSearch__GridVector. This is a structure containing magnitude and direction fields.
+
+* The method word_search__grid_vector__equals tests two WordSearch__GridVector structures for equality.
 
 Added type WordSearch__GridSequence. This is a structure containing a start field of type WordSearch__GridCoordinates and a span field of type WordSearch__GridVector. Together these fields identify a linear sequence of entries in the word search grid. 
 
+* The method word_search__grid_sequence__equals tests two WordSearch__GridSequence structures for equality.
+
 Added type WordSearch__Grid. This is a structure containing fields for width, height, and entries.  Entries is Slice containing (width * height) character values, packed and arranged in row-major order.
+
+* The methods word_search__grid__init/clear initialize and clear a structure of type WordSearch__Grid
+* The method word_search__grid__contains tests whether a pair of coordinates are contained by a grid.
+* The method word_search__grid__entry retrieves an entry from the grid at the coordinates.
+* The method word_search__grid__lookup_sequence_entry retrieves an entry in the grid according to its index into a sequence.
+* The method word_search__grid__sequence_matches_word determines whether the entries in the grid corresponding to a sequence exactly match the letters of a word. This method is going to do most of the heavy lifting in the word search solver.
 
 ---
 ### Thursday August 6, 2020

@@ -12,6 +12,8 @@ BEGIN_DECLARATIONS
 
 /**
  *  \file word_search/grid_sequence.h
+ *  \addtogroup word_search Word Search
+ *  @{
  *  \defgroup word_search__grid_sequence WordSearch__GridSequence
  *  @{
  */
@@ -45,6 +47,7 @@ char word_search__grid_sequence__equals(
 
 /**
  *  @} // group word_search__grid_coordinates
+ *  @} // group word_search
  */
 
 END_DECLARATIONS

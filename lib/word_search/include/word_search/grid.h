@@ -13,7 +13,7 @@ BEGIN_DECLARATIONS
 
 /**
  *  \file word_search/word_search__grid.h
- *  \addtogroup word_search
+ *  \addtogroup word_search Word Search
  *  @{
  *  \defgroup word_search__grid WordSearch__Grid
  *  @{
@@ -119,6 +119,7 @@ char word_search__grid__sequence_matches_word(
 
 /*
  *  @} // group word_search__grid
+ *  @} // group word_search
  */
 
 END_DECLARATIONS

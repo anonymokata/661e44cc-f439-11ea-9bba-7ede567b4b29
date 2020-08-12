@@ -4,7 +4,7 @@
 // Internal Includes
 #include "word_search/grid_vector.h"
 
-TEST_CASE( "word_search__grid_vector__equals", "[word_search]" ){
+TEST_CASE( "word_search__grid_vector__equals", "[word_search__grid_vector]" ){
     WordSearch__GridVector first = {
         .magnitude = 42,
         .direction = WordSearch__Direction__East,

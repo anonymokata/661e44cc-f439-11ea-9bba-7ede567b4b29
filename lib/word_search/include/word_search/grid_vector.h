@@ -11,6 +11,8 @@ BEGIN_DECLARATIONS
 
 /**
  *  \file word_search/grid_vector.h
+ *  \addtogroup word_search Word Search
+ *  @{
  *  \defgroup word_search__grid_vector WordSearch__GridVector
  *  @{
  */
@@ -39,6 +41,7 @@ char word_search__grid_vector__equals(
 
 /**
  *  @} // group word_search__grid_vector
+ *  @} // group word_search
  */
 
 END_DECLARATIONS

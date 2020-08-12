@@ -4,7 +4,7 @@
 // Internal Includes
 #include "word_search/grid_sequence.h"
 
-TEST_CASE( "word_search__grid_sequence__equals", "[word_search]" ){
+TEST_CASE( "word_search__grid_sequence__equals", "[word_search__grid_sequence]" ){
     WordSearch__GridSequence first = {
         .start = {
             .row = 11,
