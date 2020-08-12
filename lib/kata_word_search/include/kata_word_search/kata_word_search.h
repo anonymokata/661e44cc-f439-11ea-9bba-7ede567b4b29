@@ -22,11 +22,20 @@ typedef struct Allocator Allocator;
  *  @{
  */
 
-KataWordSearch__Solution* kata_word_search__search( 
-    Allocator* allocator, 
-    Slice* words, 
-    WordSearch__Grid* grid,
-    WordSearch__Direction direction
+/**
+ *  \brief This method searches the grid in the given direction for the given word.
+ *  \param grid A pointer to the WordSearch__Grid in which to search.
+ *  \param word A pointer a Slice containing the word to search for. Type Slice<char>
+ *  \param direction The direction in which to search
+ *  \param out_sequence An out parameter. If the desired word is located, this will store
+ *  the sequence whose entries match the letters of \p word.  
+ *  \returns 1 if the word was found, and 0 otherwise.
+ */
+char kata_word_search__find_word( 
+    WordSearch__Grid* grid, 
+    Slice* word, 
+    WordSearch__Direction direction, 
+    WordSearch__GridSequence* out_sequence 
 );
 
 /**
