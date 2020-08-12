@@ -9,6 +9,7 @@
 
 // Internal Includes
 #include "kata_word_search/kata_word_search.h"
+#include "kata_word_search/solution.h"
 
 class KataWordSearch__TestFixture {
 
@@ -84,13 +85,6 @@ class KataWordSearch__TestFixture {
 };
 
 TEST_CASE_METHOD( KataWordSearch__TestFixture, "kata_word_search__find_word", "[kata_word_search]" ){
-//char kata_word_search__find_word( 
-//    WordSearch__Grid* grid,
-//    Slice* word,
-//    WordSearch__Direction direction,
-//    WordSearch__GridSequence* out_sequence
-//)
-
     Slice scotty = slice__index( &words.slice, Slice, 3 );
     
     WordSearch__GridSequence expected_sequence = {

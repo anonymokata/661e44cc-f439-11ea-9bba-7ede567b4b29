@@ -10,7 +10,6 @@
 #include "word_search/direction.h"
 #include "word_search/grid.h"
 
-#include "kata_word_search/solution.h"
 BEGIN_DECLARATIONS
 
 // Forward Declarations

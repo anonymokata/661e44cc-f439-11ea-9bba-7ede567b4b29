@@ -1,5 +1,6 @@
 // Internal Includes
 #include "kata_word_search/kata_word_search.h"
+#include "kata_word_search/solution.h"
 
 char kata_word_search__find_word( 
     WordSearch__Grid* grid, Slice* word, 
@@ -41,5 +42,32 @@ char kata_word_search__search(
     WordSearch__Direction direction,
     Slice* out_solutions
 ){
-    return 0;
+    if( out_solutions == NULL || out_solutions->capacity < words->length ){
+        return 0;
+    }
+
+    out_solutions->length = 0;
+    for( unsigned long word_index = 0; word_index < words->length; word_index++ ){
+
+        Slice word = slice__index( words, Slice, word_index ); 
+
+        WordSearch__GridSequence matching_sequence;
+        if( kata_word_search__find_word( grid, &word, direction, &matching_sequence ) ){
+            slice__index( out_solutions, KataWordSearch__Solution, word_index ) = (KataWordSearch__Solution) {
+                .word = word,
+                .disposition = WordSearch__Solution__Disposition__Found,
+                .sequence = matching_sequence
+            };
+        }
+        else{
+            slice__index( out_solutions, KataWordSearch__Solution, word_index ) = (KataWordSearch__Solution) {
+                .word = word,
+                .disposition = WordSearch__Solution__Disposition__NotFound,
+            };
+        }
+
+        out_solutions->length += 1;
+    }
+
+    return 1;
 }
