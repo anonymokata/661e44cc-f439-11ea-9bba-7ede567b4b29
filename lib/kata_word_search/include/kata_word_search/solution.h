@@ -18,10 +18,10 @@
 
 BEGIN_DECLARATIONS
 
-typedef enum WordSearch__Solution__Disposition{
-    WordSearch__Solution__Disposition__Found,
-    WordSearch__Solution__Disposition__NotFound
-} WordSearch__Solution__Disposition;
+typedef enum KataWordSearch__Solution__Disposition{
+    WordSearch__Solution__Disposition__NotFound,
+    WordSearch__Solution__Disposition__Found
+} KataWordSearch__Solution__Disposition;
 
 /** A structure containing fields which describe the solution for a single word found on the word search grid. */ 
 typedef struct KataWordSearch__Solution{
@@ -32,7 +32,7 @@ typedef struct KataWordSearch__Solution{
     /**
      *  Indicates whether the word was found in the word search grid.
      */
-    WordSearch__Solution__Disposition disposition;
+    KataWordSearch__Solution__Disposition disposition;
     /** 
      * The sequence of grid entries occupied by the found word. 
      */ 

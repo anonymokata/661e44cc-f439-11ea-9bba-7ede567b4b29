@@ -3,6 +3,7 @@ set( kata_word_search__DIR "${CMAKE_CURRENT_LIST_DIR}" )
 add_library(
     kata_word_search
     ${kata_word_search__DIR}/src/solution.c
+    ${kata_word_search__DIR}/src/kata_word_search.c
 )
 
 target_include_directories(
@@ -37,6 +38,12 @@ if( BUILD_TESTS )
     catch2__add_test(
         NAME test__kata_word_search__solution
         SOURCES "${kata_word_search__DIR}/test/test__kata_word_search__solution.cpp"
+        LINK_LIBRARIES kata_word_search
+    )
+
+    catch2__add_test(
+        NAME test__kata_word_search
+        SOURCES "${kata_word_search__DIR}/test/test__kata_word_search.cpp"
         LINK_LIBRARIES kata_word_search
     )
 
