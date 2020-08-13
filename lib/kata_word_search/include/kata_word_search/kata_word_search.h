@@ -23,6 +23,18 @@ typedef struct Allocator Allocator;
  *  @{
  */
 
+
+/**
+ *  \brief This method searches the grid for the given word.
+ *  \param grid A pointer to the WordSearch__Grid in which to search.
+ *  \param word A pointer to a Slice containing the word to search for. Type is Slice<char>.
+ *  \returns The solution to the search.
+ */
+KataWordSearch__Solution kata_word_search__find_word(
+    WordSearch__Grid const *grid,
+    Slice const *word
+);
+
 /**
  *  \brief This method searches the grid in the given direction for the given word.
  *  \param grid A pointer to the WordSearch__Grid in which to search.
@@ -40,17 +52,6 @@ char kata_word_search__find_word_in_direction(
 );
 
 /**
- *  \brief This method searches the grid for the given word.
- *  \param grid A pointer to the WordSearch__Grid in which to search.
- *  \param word A pointer to a Slice containing the word to search for. Type is Slice<char>.
- *  \returns The solution to the search.
- */
-KataWordSearch__Solution kata_word_search__find_word(
-    WordSearch__Grid const *grid,
-    Slice const *word
-);
-
-/**
  *  \brief Searches the given grid for the given words in the given direction.
  *  \param words A list of the words to be found in the \p grid. This is a pointer to a Slice<Slice<char>>
  *  \param grid The grid in which to search for the words contained in \p words.
@@ -64,6 +65,21 @@ char kata_word_search__search_in_direction(
     Slice const *words, 
     WordSearch__Grid const *grid,
     WordSearch__Direction direction,
+    Slice* out_solutions
+);
+
+/**
+ *  \brief This method searches the grid for the given words, and returns a solution for each.
+ *  \param words A list of the words to be found in \p grid. This is a pointer to a Slice<Slice<char>>
+ *  \param grid The grid in which to search for the words contained in \p words.
+ *  \param out_solutions A pointer to a pre-allocated Slice<KataWordSearch__Solution>. The capacity should be equal to
+ *  the length of \p words.
+ *  \returns 1 if the search was completed successfully, and 0 otherwise. The search can fail if \p out_solutions is NULL,
+ *  or if it lacks the required capacity to hold solutions for every word.  
+ */
+char kata_word_search__search(
+    Slice const *words,
+    WordSearch__Grid const *grid,
     Slice* out_solutions
 );
 

@@ -77,8 +77,9 @@ class KataWordSearch__TestFixture {
             "KIRK",
             "SULU",
             "KHAN",
-            "WORF",
             "RIKER",
+            "WORF",
+            "ABCDEFG"
         };
 
         SystemAllocator system_allocator;
@@ -164,13 +165,17 @@ TEST_CASE_METHOD( KataWordSearch__TestFixture, "kata_word_search__search_in_dire
         {
             .word = slice__string_literal( "KHAN" ),
             .disposition = WordSearch__Solution__Disposition__NotFound,
-        },        
+        },
+        {
+            .word = slice__string_literal( "RIKER" ),
+            .disposition = WordSearch__Solution__Disposition__NotFound,
+        },      
         {
             .word = slice__string_literal( "WORF" ),
             .disposition = WordSearch__Solution__Disposition__NotFound,
         },
         {
-            .word = slice__string_literal( "RIKER" ),
+            .word = slice__string_literal( "ABCDEFG" ),
             .disposition = WordSearch__Solution__Disposition__NotFound,
         }
     };
@@ -278,4 +283,154 @@ TEST_CASE_METHOD( KataWordSearch__TestFixture, "kata_word_search__find_word", "[
 
     found_solution = kata_word_search__find_word( &grid, &word );
     REQUIRE( kata_word_search__solution__equals( &found_solution, &expected_solution ) );
+}
+
+
+TEST_CASE_METHOD( KataWordSearch__TestFixture, "kata_word_search__search", "[kata_word_search]" ){
+    KataWordSearch__Solution expected_solutions[] = {
+        {
+            .word = slice__string_literal( "SCOTTY" ),
+            .disposition = WordSearch__Solution__Disposition__Found,
+            .sequence = {
+                .start = {
+                    .row = 5,
+                    .column = 0
+                },
+                .span = {
+                    .magnitude = 6,
+                    .direction = WordSearch__Direction__East
+                }
+            }
+        },
+        {
+            .word = slice__string_literal( "SPOCK" ),
+            .disposition = WordSearch__Solution__Disposition__Found,
+            .sequence = {
+                .start = {
+                    .row = 1,
+                    .column = 2
+                },
+                .span = {
+                    .magnitude = 5,
+                    .direction = WordSearch__Direction__SouthEast
+                }
+            }
+        },
+        {
+            .word = slice__string_literal( "BONES" ),
+            .disposition = WordSearch__Solution__Disposition__Found,
+            .sequence = {
+                .start = {
+                    .row = 6,
+                    .column = 0
+                },
+                .span = {
+                    .magnitude = 5,
+                    .direction = WordSearch__Direction__South
+                }
+            }
+        },
+        {
+            .word = slice__string_literal( "UHURA" ),
+            .disposition = WordSearch__Solution__Disposition__Found,
+            .sequence = {
+                .start = {
+                    .row = 0,
+                    .column = 4
+                },
+                .span = {
+                    .magnitude = 5,
+                    .direction = WordSearch__Direction__SouthWest
+                }
+            }
+        },
+        {
+            .word = slice__string_literal( "KIRK" ),
+            .disposition = WordSearch__Solution__Disposition__Found,
+            .sequence = {
+                .start = {
+                    .row = 7,
+                    .column = 4
+                },
+                .span = {
+                    .magnitude = 4,
+                    .direction = WordSearch__Direction__West
+                }
+            }
+        },
+        {
+            .word = slice__string_literal( "SULU" ),
+            .disposition = WordSearch__Solution__Disposition__Found,
+            .sequence = {
+                .start = {
+                    .row = 3,
+                    .column = 3
+                },
+                .span = {
+                    .magnitude = 4,
+                    .direction = WordSearch__Direction__NorthWest
+                }
+            }
+        },
+        {
+            .word = slice__string_literal( "KHAN" ),
+            .disposition = WordSearch__Solution__Disposition__Found,
+            .sequence = {
+                .start = {
+                    .row = 9,
+                    .column = 5
+                },
+                .span = {
+                    .magnitude = 4,
+                    .direction = WordSearch__Direction__North
+                }
+            }
+        },
+        {
+            .word = slice__string_literal( "RIKER" ),
+            .disposition = WordSearch__Solution__Disposition__Found,
+            .sequence = {
+                .start = {
+                    .row = 14,
+                    .column = 6
+                },
+                .span = {
+                    .magnitude = 5,
+                    .direction = WordSearch__Direction__NorthEast
+                }
+            }
+        },
+        {
+            .word = slice__string_literal( "WORF" ),
+            .disposition = WordSearch__Solution__Disposition__Found,
+            .sequence = {
+                .start = {
+                    .row = 14,
+                    .column = 11
+                },
+                .span = {
+                    .magnitude = 4,
+                    .direction = WordSearch__Direction__NorthEast
+                }
+            }
+        },
+        {
+            .word = slice__string_literal( "ABCDEFG" ),
+            .disposition = WordSearch__Solution__Disposition__NotFound
+        }
+    };
+
+    Slice solutions;
+    slice__init( &solutions, system_allocator.allocator, sizeof( KataWordSearch__Solution), words.slice.length );
+
+    REQUIRE( kata_word_search__search( &words.slice, &grid, &solutions ) );
+
+    for( unsigned long solution_index = 0; solution_index < words.slice.length; solution_index++ ){
+        REQUIRE( 
+            kata_word_search__solution__equals( 
+                &slice__index( &solutions, KataWordSearch__Solution, solution_index ),
+                &expected_solutions[ solution_index ]
+            )
+        );
+    }
 }

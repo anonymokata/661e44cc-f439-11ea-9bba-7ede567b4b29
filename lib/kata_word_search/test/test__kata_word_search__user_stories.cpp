@@ -78,6 +78,7 @@ class KataWordSearch__UserStories__TestFixture{
             "KHAN",
             "WORF",
             "RIKER",
+            "ABCDEFG"
         };
 
         SystemAllocator system_allocator;

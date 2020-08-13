@@ -69,6 +69,7 @@ char kata_word_search__search_in_direction(
     }
 
     out_solutions->length = 0;
+
     for( unsigned long word_index = 0; word_index < words->length; word_index++ ){
 
         Slice word = slice__index( words, Slice, word_index ); 
@@ -91,5 +92,13 @@ char kata_word_search__search_in_direction(
         out_solutions->length += 1;
     }
 
+    return 1;
+}
+
+char kata_word_search__search(
+    Slice const *words,
+    WordSearch__Grid const *grid,
+    Slice* out_solutions
+){
     return 1;
 }
