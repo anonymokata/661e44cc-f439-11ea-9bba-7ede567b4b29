@@ -15,3 +15,48 @@ char word_search__grid_sequence__equals(
 
     return 0;
 }
+
+char word_search__grid_sequence__coordinates_of( WordSearch__GridSequence* sequence, unsigned long index, WordSearch__GridCoordinates* out_coordinates ){
+    if( index >= sequence->span.magnitude ){
+        return 0;
+    }
+
+    switch( sequence->span.direction ){
+        case WordSearch__Direction__East:
+            out_coordinates->row = sequence->start.row;
+            out_coordinates->column = sequence->start.column + index;
+            break;
+        case WordSearch__Direction__SouthEast:
+            out_coordinates->row = sequence->start.row + index;
+            out_coordinates->column = sequence->start.column + index;
+            break;
+        case WordSearch__Direction__South:
+            out_coordinates->row = sequence->start.row + index;
+            out_coordinates->column = sequence->start.column;
+            break;
+        case WordSearch__Direction__SouthWest:
+            out_coordinates->row = sequence->start.row + index;
+            out_coordinates->column = sequence->start.column - index;
+            break;
+        case WordSearch__Direction__West:
+            out_coordinates->row = sequence->start.row;
+            out_coordinates->column = sequence->start.column - index;
+            break;
+        case WordSearch__Direction__NorthWest:
+            out_coordinates->row = sequence->start.row - index;
+            out_coordinates->column = sequence->start.column - index;
+            break;
+        case WordSearch__Direction__North:
+            out_coordinates->row = sequence->start.row - index;
+            out_coordinates->column = sequence->start.column;
+            break;
+        case WordSearch__Direction__NorthEast:
+            out_coordinates->row = sequence->start.row - index;
+            out_coordinates->column = sequence->start.column + index;
+            break;
+        default:
+            return 0;
+    }
+
+    return 1;
+}
