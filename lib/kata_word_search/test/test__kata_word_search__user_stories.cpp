@@ -105,7 +105,7 @@ SCENARIO_METHOD(
             Slice solutions;
             slice__init( &solutions, system_allocator.allocator, sizeof( KataWordSearch__Solution ), 1 );
 
-            char success = kata_word_search__search(
+            char success = kata_word_search__search_in_direction(
                 &words,
                 &grid,
                 WordSearch__Direction__East,
@@ -165,7 +165,7 @@ SCENARIO_METHOD(
             Slice solutions;
             slice__init( &solutions, system_allocator.allocator, sizeof( KataWordSearch__Solution ), 1 );
 
-            char success = kata_word_search__search(
+            char success = kata_word_search__search_in_direction(
                 &words,
                 &grid,
                 WordSearch__Direction__SouthEast,
@@ -225,7 +225,7 @@ SCENARIO_METHOD(
             Slice solutions;
             slice__init( &solutions, system_allocator.allocator, sizeof( KataWordSearch__Solution ), 1 );
 
-            char success = kata_word_search__search(
+            char success = kata_word_search__search_in_direction(
                 &words,
                 &grid,
                 WordSearch__Direction__South,
@@ -285,7 +285,7 @@ SCENARIO_METHOD(
             Slice solutions;
             slice__init( &solutions, system_allocator.allocator, sizeof( KataWordSearch__Solution ), 1 );
 
-            char success = kata_word_search__search(
+            char success = kata_word_search__search_in_direction(
                 &words,
                 &grid,
                 WordSearch__Direction__SouthWest,
@@ -345,7 +345,7 @@ SCENARIO_METHOD(
             Slice solutions;
             slice__init( &solutions, system_allocator.allocator, sizeof( KataWordSearch__Solution ), 1 );
 
-            char success = kata_word_search__search(
+            char success = kata_word_search__search_in_direction(
                 &words,
                 &grid,
                 WordSearch__Direction__West,
@@ -405,7 +405,7 @@ SCENARIO_METHOD(
             Slice solutions;
             slice__init( &solutions, system_allocator.allocator, sizeof( KataWordSearch__Solution ), 1 );
 
-            char success = kata_word_search__search(
+            char success = kata_word_search__search_in_direction(
                 &words,
                 &grid,
                 WordSearch__Direction__NorthWest,
@@ -465,7 +465,7 @@ SCENARIO_METHOD(
             Slice solutions;
             slice__init( &solutions, system_allocator.allocator, sizeof( KataWordSearch__Solution ), 1 );
 
-            char success = kata_word_search__search(
+            char success = kata_word_search__search_in_direction(
                 &words,
                 &grid,
                 WordSearch__Direction__North,
@@ -526,7 +526,7 @@ SCENARIO_METHOD(
             Slice solutions;
             slice__init( &solutions, system_allocator.allocator, sizeof( KataWordSearch__Solution ), 2 );
 
-            char success = kata_word_search__search(
+            char success = kata_word_search__search_in_direction(
                 &words,
                 &grid,
                 WordSearch__Direction__NorthEast,

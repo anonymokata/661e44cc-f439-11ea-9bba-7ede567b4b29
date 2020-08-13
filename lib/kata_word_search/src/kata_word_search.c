@@ -2,10 +2,21 @@
 #include "kata_word_search/kata_word_search.h"
 #include "kata_word_search/solution.h"
 
-char kata_word_search__find_word( 
-    WordSearch__Grid* grid, Slice* word, 
+KataWordSearch__Solution kata_word_search__find_word(
+    WordSearch__Grid const *grid,
+    Slice const *word
+){
+    return (KataWordSearch__Solution) {
+        .word = *word,
+        .disposition = WordSearch__Solution__Disposition__NotFound
+    };
+}
+
+char kata_word_search__find_word_in_direction(
+    WordSearch__Grid const *grid, 
+    Slice const *word, 
     WordSearch__Direction direction, 
-    WordSearch__GridSequence* out_sequence 
+    WordSearch__GridSequence *out_sequence 
 ){
     if( out_sequence == NULL ){
         return 0;
@@ -36,9 +47,9 @@ char kata_word_search__find_word(
     return 0;
 }
 
-char kata_word_search__search( 
-    Slice* words, 
-    WordSearch__Grid* grid,
+char kata_word_search__search_in_direction( 
+    Slice const *words, 
+    WordSearch__Grid const *grid,
     WordSearch__Direction direction,
     Slice* out_solutions
 ){
@@ -52,7 +63,7 @@ char kata_word_search__search(
         Slice word = slice__index( words, Slice, word_index ); 
 
         WordSearch__GridSequence matching_sequence;
-        if( kata_word_search__find_word( grid, &word, direction, &matching_sequence ) ){
+        if( kata_word_search__find_word_in_direction( grid, &word, direction, &matching_sequence ) ){
             slice__index( out_solutions, KataWordSearch__Solution, word_index ) = (KataWordSearch__Solution) {
                 .word = word,
                 .disposition = WordSearch__Solution__Disposition__Found,

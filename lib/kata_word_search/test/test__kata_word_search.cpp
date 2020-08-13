@@ -51,7 +51,7 @@ class KataWordSearch__TestFixture {
 
         const unsigned long GRID_DIM = 15;
 
-        const std::vector<char> GRID = {
+         const std::vector<char> GRID = {
             'U', 'M', 'K', 'H', 'U', 'L', 'K', 'I', 'N', 'V', 'J', 'O', 'C', 'W', 'E',
             'L', 'L', 'S', 'H', 'K', 'Z', 'Z', 'W', 'Z', 'C', 'G', 'J', 'U', 'Y', 'G',
             'H', 'S', 'U', 'P', 'J', 'P', 'R', 'J', 'D', 'H', 'S', 'B', 'X', 'T', 'G',
@@ -62,21 +62,23 @@ class KataWordSearch__TestFixture {
             'O', 'K', 'R', 'I', 'K', 'A', 'M', 'M', 'R', 'M', 'F', 'B', 'A', 'P', 'P',
             'N', 'U', 'I', 'I', 'Y', 'H', 'Q', 'M', 'E', 'M', 'Q', 'R', 'Y', 'F', 'S',
             'E', 'Y', 'Z', 'Y', 'G', 'K', 'Q', 'J', 'P', 'C', 'Q', 'W', 'Y', 'A', 'K',
-            'S', 'J', 'F', 'Z', 'M', 'Q', 'I', 'B', 'D', 'B', 'E', 'M', 'K', 'W', 'D',
-            'T', 'G', 'L', 'B', 'H', 'C', 'B', 'E', 'C', 'H', 'T', 'O', 'Y', 'I', 'K',
-            'O', 'J', 'Y', 'E', 'U', 'L', 'N', 'C', 'C', 'L', 'Y', 'B', 'Z', 'U', 'H',
-            'W', 'Z', 'M', 'I', 'S', 'U', 'K', 'U', 'R', 'B', 'I', 'D', 'U', 'X', 'S',
-            'K', 'Y', 'L', 'B', 'Q', 'Q', 'P', 'M', 'D', 'F', 'C', 'K', 'E', 'A', 'B'
+            'S', 'J', 'F', 'Z', 'M', 'Q', 'I', 'B', 'D', 'B', 'R', 'M', 'K', 'W', 'D',
+            'T', 'G', 'L', 'B', 'H', 'C', 'B', 'E', 'C', 'E', 'T', 'O', 'Y', 'I', 'F',
+            'O', 'J', 'Y', 'E', 'U', 'L', 'N', 'C', 'K', 'L', 'Y', 'B', 'Z', 'R', 'H',
+            'W', 'Z', 'M', 'I', 'S', 'U', 'K', 'I', 'R', 'B', 'I', 'D', 'O', 'X', 'S',
+            'K', 'Y', 'L', 'B', 'Q', 'Q', 'R', 'M', 'D', 'F', 'C', 'W', 'E', 'A', 'B'
         };
 
         const std::vector<std::string> WORDS = {
-            "BONES",
-            "KHAN",
-            "KIRK",
             "SCOTTY",
             "SPOCK",
+            "BONES",
+            "UHURA",
+            "KIRK",
             "SULU",
-            "UHURA"
+            "KHAN",
+            "WORF",
+            "RIKER",
         };
 
         SystemAllocator system_allocator;
@@ -84,8 +86,8 @@ class KataWordSearch__TestFixture {
         WordSearch__Grid grid;
 };
 
-TEST_CASE_METHOD( KataWordSearch__TestFixture, "kata_word_search__find_word", "[kata_word_search]" ){
-    Slice scotty = slice__index( &words.slice, Slice, 3 );
+TEST_CASE_METHOD( KataWordSearch__TestFixture, "kata_word_search__find_word_in_direction", "[kata_word_search]" ){
+    Slice scotty = slice__string_literal( "SCOTTY" );
     
     WordSearch__GridSequence expected_sequence = {
         .start = {
@@ -100,7 +102,7 @@ TEST_CASE_METHOD( KataWordSearch__TestFixture, "kata_word_search__find_word", "[
 
     WordSearch__GridSequence sequence;
     REQUIRE( 
-        kata_word_search__find_word( 
+        kata_word_search__find_word_in_direction( 
             &grid,
             &scotty,
             WordSearch__Direction__East,
@@ -112,7 +114,7 @@ TEST_CASE_METHOD( KataWordSearch__TestFixture, "kata_word_search__find_word", "[
 
     Slice does_not_exist = slice__string_literal( "ABCDEFG" );
     REQUIRE_FALSE(
-        kata_word_search__find_word( 
+        kata_word_search__find_word_in_direction( 
             &grid,
             &does_not_exist,
             WordSearch__Direction__East,
@@ -121,24 +123,12 @@ TEST_CASE_METHOD( KataWordSearch__TestFixture, "kata_word_search__find_word", "[
     );
 }
 
-TEST_CASE_METHOD( KataWordSearch__TestFixture, "kata_word_search__search", "[kata_word_search]" ){
+TEST_CASE_METHOD( KataWordSearch__TestFixture, "kata_word_search__search_in_direction__east", "[kata_word_search]" ){
     unsigned long word_index;
 
     KataWordSearch__Solution expected_solutions[] = {
         {
-            .word = slice__index( &words.slice, Slice, 0 ),
-            .disposition = WordSearch__Solution__Disposition__NotFound,
-        },
-        {
-            .word = slice__index( &words.slice, Slice, 1 ),
-            .disposition = WordSearch__Solution__Disposition__NotFound,
-        },
-        {
-            .word = slice__index( &words.slice, Slice, 2 ),
-            .disposition = WordSearch__Solution__Disposition__NotFound,
-        },
-        {
-            .word = slice__index( &words.slice, Slice, 3 ),
+            .word = slice__string_literal( "SCOTTY" ),
             .disposition = WordSearch__Solution__Disposition__Found,
             .sequence = {
                 .start = {
@@ -152,15 +142,35 @@ TEST_CASE_METHOD( KataWordSearch__TestFixture, "kata_word_search__search", "[kat
             }
         },
         {
-            .word = slice__index( &words.slice, Slice, 4 ),
+            .word = slice__string_literal( "SPOCK" ),
             .disposition = WordSearch__Solution__Disposition__NotFound,
         },
         {
-            .word = slice__index( &words.slice, Slice, 5 ),
+            .word = slice__string_literal( "BONES" ),
             .disposition = WordSearch__Solution__Disposition__NotFound,
         },
         {
-            .word = slice__index( &words.slice, Slice, 6 ),
+            .word = slice__string_literal( "UHURA" ),
+            .disposition = WordSearch__Solution__Disposition__NotFound,
+        },
+        {
+            .word = slice__string_literal( "KIRK" ),
+            .disposition = WordSearch__Solution__Disposition__NotFound,
+        },
+        {
+            .word = slice__string_literal( "SULU" ),
+            .disposition = WordSearch__Solution__Disposition__NotFound,
+        },
+        {
+            .word = slice__string_literal( "KHAN" ),
+            .disposition = WordSearch__Solution__Disposition__NotFound,
+        },        
+        {
+            .word = slice__string_literal( "WORF" ),
+            .disposition = WordSearch__Solution__Disposition__NotFound,
+        },
+        {
+            .word = slice__string_literal( "RIKER" ),
             .disposition = WordSearch__Solution__Disposition__NotFound,
         }
     };
@@ -170,7 +180,7 @@ TEST_CASE_METHOD( KataWordSearch__TestFixture, "kata_word_search__search", "[kat
 
     // Test whether expected solution is found
     REQUIRE( 
-        kata_word_search__search( 
+        kata_word_search__search_in_direction( 
             &words.slice,
             &grid,
             WordSearch__Direction__East,
@@ -181,7 +191,6 @@ TEST_CASE_METHOD( KataWordSearch__TestFixture, "kata_word_search__search", "[kat
     REQUIRE( solutions.length == words.slice.length );
 
     for( word_index = 0; word_index < words.slice.length; word_index++ ){
-        KataWordSearch__Solution current_solution = slice__index( &solutions, KataWordSearch__Solution, word_index );
         REQUIRE( 
             kata_word_search__solution__equals( 
                 &slice__index( &solutions, KataWordSearch__Solution, word_index ), 
@@ -196,7 +205,7 @@ TEST_CASE_METHOD( KataWordSearch__TestFixture, "kata_word_search__search", "[kat
     slice__init( &solutions, system_allocator.allocator, sizeof( KataWordSearch__Solution ), 1 );
 
     REQUIRE_FALSE( 
-        kata_word_search__search( 
+        kata_word_search__search_in_direction( 
             &words.slice,
             &grid,
             WordSearch__Direction__East,
@@ -206,7 +215,7 @@ TEST_CASE_METHOD( KataWordSearch__TestFixture, "kata_word_search__search", "[kat
 
     // Test whether parameter solutions == NULL returns 0
     REQUIRE_FALSE(
-        kata_word_search__search( 
+        kata_word_search__search_in_direction( 
             &words.slice,
             &grid,
             WordSearch__Direction__East,
@@ -215,4 +224,58 @@ TEST_CASE_METHOD( KataWordSearch__TestFixture, "kata_word_search__search", "[kat
     );
 
     slice__clear( &solutions, system_allocator.allocator );
+}
+
+TEST_CASE_METHOD( KataWordSearch__TestFixture, "kata_word_search__find_word", "[kata_word_search]" ){
+    Slice word;
+    KataWordSearch__Solution expected_solution;
+    KataWordSearch__Solution found_solution;
+
+    word = slice__string_literal( "SCOTTY" );
+    expected_solution = {
+        .word = word,
+        .disposition = WordSearch__Solution__Disposition__Found,
+        .sequence = {
+            .start = {
+                .row = 5,
+                .column = 0
+            },
+            .span = {
+                .magnitude = 6,
+                .direction = WordSearch__Direction__East
+            }
+        }
+    };
+
+    found_solution = kata_word_search__find_word( &grid, &word );
+
+    REQUIRE( kata_word_search__solution__equals( &found_solution, &expected_solution ) );
+
+    word = slice__string_literal( "SPOCK" );
+    expected_solution = (KataWordSearch__Solution) {
+        .word = slice__string_literal( "SPOCK" ),
+        .disposition = WordSearch__Solution__Disposition__Found,
+        .sequence = {
+            .start = {
+                .row = 1,
+                .column = 2
+            },
+            .span = {
+                .magnitude = 5,
+                .direction = WordSearch__Direction__SouthEast
+            }
+        }
+    };
+
+    found_solution = kata_word_search__find_word( &grid, &word );
+    REQUIRE( kata_word_search__solution__equals( &found_solution, &expected_solution ) );
+
+    word = slice__string_literal( "ABCDEFG" );
+    expected_solution = {
+        .word = slice__string_literal( "ABCDEFG" ),
+        .disposition = WordSearch__Solution__Disposition__NotFound
+    };
+
+    found_solution = kata_word_search__find_word( &grid, &word );
+    REQUIRE( kata_word_search__solution__equals( &found_solution, &expected_solution ) );
 }

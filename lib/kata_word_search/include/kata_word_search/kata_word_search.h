@@ -10,6 +10,8 @@
 #include "word_search/direction.h"
 #include "word_search/grid.h"
 
+#include "kata_word_search/solution.h"
+
 BEGIN_DECLARATIONS
 
 // Forward Declarations
@@ -24,17 +26,28 @@ typedef struct Allocator Allocator;
 /**
  *  \brief This method searches the grid in the given direction for the given word.
  *  \param grid A pointer to the WordSearch__Grid in which to search.
- *  \param word A pointer a Slice containing the word to search for. Type Slice<char>
+ *  \param word A pointer a Slice containing the word to search for. Type is Slice<char>.
  *  \param direction The direction in which to search
  *  \param out_sequence An out parameter. If the desired word is located, this will store
  *  the sequence whose entries match the letters of \p word.  
  *  \returns 1 if the word was found, and 0 otherwise.
  */
-char kata_word_search__find_word( 
-    WordSearch__Grid* grid, 
-    Slice* word, 
+char kata_word_search__find_word_in_direction( 
+    WordSearch__Grid const *grid, 
+    Slice const *word, 
     WordSearch__Direction direction, 
     WordSearch__GridSequence* out_sequence 
+);
+
+/**
+ *  \brief This method searches the grid for the given word.
+ *  \param grid A pointer to the WordSearch__Grid in which to search.
+ *  \param word A pointer to a Slice containing the word to search for. Type is Slice<char>.
+ *  \returns The solution to the search.
+ */
+KataWordSearch__Solution kata_word_search__find_word(
+    WordSearch__Grid const *grid,
+    Slice const *word
 );
 
 /**
@@ -47,9 +60,9 @@ char kata_word_search__find_word(
  *  \returns 1 if the search was completed successfully, 0 otherwise.  The search can fail if \p out_solutions is NULL or
  *  lacks the required capacity to hold solutions for every word.
  */
-char kata_word_search__search( 
-    Slice* words, 
-    WordSearch__Grid* grid,
+char kata_word_search__search_in_direction( 
+    Slice const *words, 
+    WordSearch__Grid const *grid,
     WordSearch__Direction direction,
     Slice* out_solutions
 );
