@@ -47,4 +47,10 @@ if( BUILD_TESTS )
         LINK_LIBRARIES kata_word_search
     )
 
+    catch2__add_test(
+        NAME test__kata_word_search__user_stories
+        SOURCES "${kata_word_search__DIR}/test/test__kata_word_search__user_stories.cpp"
+        LINK_LIBRARIES kata_word_search
+    )
+
 endif( BUILD_TESTS )
