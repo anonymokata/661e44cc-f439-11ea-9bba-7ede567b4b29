@@ -6,6 +6,17 @@ KataWordSearch__Solution kata_word_search__find_word(
     WordSearch__Grid const *grid,
     Slice const *word
 ){
+    WordSearch__GridSequence sequence;
+    for( unsigned long direction_index = 0; direction_index < WordSearch__Direction__COUNT; direction_index++ ){
+        if( kata_word_search__find_word_in_direction( grid, word, direction_index, &sequence ) ){
+            return (KataWordSearch__Solution) {
+                .word = *word,
+                .disposition = WordSearch__Solution__Disposition__Found,
+                .sequence = sequence
+            };
+        }
+    }
+
     return (KataWordSearch__Solution) {
         .word = *word,
         .disposition = WordSearch__Solution__Disposition__NotFound
