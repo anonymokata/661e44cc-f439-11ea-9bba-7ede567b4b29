@@ -93,21 +93,23 @@ class WordSearch__Grid__TestFixture {
             'O', 'K', 'R', 'I', 'K', 'A', 'M', 'M', 'R', 'M', 'F', 'B', 'A', 'P', 'P',
             'N', 'U', 'I', 'I', 'Y', 'H', 'Q', 'M', 'E', 'M', 'Q', 'R', 'Y', 'F', 'S',
             'E', 'Y', 'Z', 'Y', 'G', 'K', 'Q', 'J', 'P', 'C', 'Q', 'W', 'Y', 'A', 'K',
-            'S', 'J', 'F', 'Z', 'M', 'Q', 'I', 'B', 'D', 'B', 'E', 'M', 'K', 'W', 'D',
-            'T', 'G', 'L', 'B', 'H', 'C', 'B', 'E', 'C', 'H', 'T', 'O', 'Y', 'I', 'K',
-            'O', 'J', 'Y', 'E', 'U', 'L', 'N', 'C', 'C', 'L', 'Y', 'B', 'Z', 'U', 'H',
-            'W', 'Z', 'M', 'I', 'S', 'U', 'K', 'U', 'R', 'B', 'I', 'D', 'U', 'X', 'S',
-            'K', 'Y', 'L', 'B', 'Q', 'Q', 'P', 'M', 'D', 'F', 'C', 'K', 'E', 'A', 'B'
+            'S', 'J', 'F', 'Z', 'M', 'Q', 'I', 'B', 'D', 'B', 'R', 'M', 'K', 'W', 'D',
+            'T', 'G', 'L', 'B', 'H', 'C', 'B', 'E', 'C', 'E', 'T', 'O', 'Y', 'I', 'F',
+            'O', 'J', 'Y', 'E', 'U', 'L', 'N', 'C', 'K', 'L', 'Y', 'B', 'Z', 'R', 'H',
+            'W', 'Z', 'M', 'I', 'S', 'U', 'K', 'I', 'R', 'B', 'I', 'D', 'O', 'X', 'S',
+            'K', 'Y', 'L', 'B', 'Q', 'Q', 'R', 'M', 'D', 'F', 'C', 'W', 'E', 'A', 'B'
         };
 
         const std::vector<std::string> WORDS = {
-            "BONES",
-            "KHAN",
-            "KIRK",
             "SCOTTY",
             "SPOCK",
+            "BONES",
+            "UHURA",
+            "KIRK",
             "SULU",
-            "UHURA"
+            "KHAN",
+            "WORF",
+            "RIKER",
         };
 
         WordSearch__Grid grid;
@@ -164,7 +166,7 @@ TEST_CASE_METHOD( WordSearch__Grid__TestFixture, "word_search__grid__entry", "[w
     REQUIRE( word_search__grid__entry( &grid, &current_coordinates ) == 'B' );
 
     current_coordinates = { .row = 15, .column = 15 };
-    REQUIRE( word_search__grid__entry( &grid, &current_coordinates ) == '\0' );
+    REQUIRE( word_search__grid__entry( &grid, &current_coordinates ) == 0 );
 }
 
 TEST_CASE_METHOD( WordSearch__Grid__TestFixture, "word_search__grid__lookup_sequence_entry", "[word_search__grid]" ){
@@ -201,39 +203,6 @@ TEST_CASE_METHOD( WordSearch__Grid__TestFixture, "word_search__grid__lookup_sequ
 
 TEST_CASE_METHOD( WordSearch__Grid__TestFixture, "word_search__grid__sequence_matches_word", "[word_search__grid]" ){
     WordSearch__GridSequence sequences[] = {
-        // BONES
-        {
-            .start = {
-                .row = 6,
-                .column = 0
-            },
-            .span = {
-                .magnitude = 5,
-                .direction = WordSearch__Direction__South
-            }
-        },
-        // KHAN
-        {
-            .start = {
-                .row = 9,
-                .column = 5
-            },
-            .span = {
-                .magnitude = 4,
-                .direction = WordSearch__Direction__North
-            }
-        },
-        // KIRK
-        {
-            .start = {
-                .row = 7,
-                .column = 4
-            },
-            .span = {
-                .magnitude = 4,
-                .direction = WordSearch__Direction__West
-            }
-        },
         // SCOTTY
         {
             .start = {
@@ -256,15 +225,15 @@ TEST_CASE_METHOD( WordSearch__Grid__TestFixture, "word_search__grid__sequence_ma
                 .direction = WordSearch__Direction__SouthEast
             }
         },
-        // SULU
+        // BONES
         {
             .start = {
-                .row = 3,
-                .column = 3
+                .row = 6,
+                .column = 0
             },
             .span = {
-                .magnitude = 4,
-                .direction = WordSearch__Direction__NorthWest
+                .magnitude = 5,
+                .direction = WordSearch__Direction__South
             }
         },
         // UHURA
@@ -277,6 +246,61 @@ TEST_CASE_METHOD( WordSearch__Grid__TestFixture, "word_search__grid__sequence_ma
                 .magnitude = 5,
                 .direction = WordSearch__Direction__SouthWest
             }
+        },
+        // KIRK
+        {
+            .start = {
+                .row = 7,
+                .column = 4
+            },
+            .span = {
+                .magnitude = 4,
+                .direction = WordSearch__Direction__West
+            }
+        },
+        // SULU
+        {
+            .start = {
+                .row = 3,
+                .column = 3
+            },
+            .span = {
+                .magnitude = 4,
+                .direction = WordSearch__Direction__NorthWest
+            }
+        },
+        // KHAN
+        {
+            .start = {
+                .row = 9,
+                .column = 5
+            },
+            .span = {
+                .magnitude = 4,
+                .direction = WordSearch__Direction__North
+            }
+        },
+        // WORF
+        {
+            .start = {
+                .row = 14,
+                .column = 11
+            },
+            .span = {
+                .magnitude = 4,
+                .direction = WordSearch__Direction__NorthEast
+            }
+        },
+        // RIKER
+        {
+            .start = {
+                .row = 14,
+                .column = 6
+            },
+            .span = {
+                .magnitude = 5,
+                .direction = WordSearch__Direction__NorthEast
+            } 
         }
     };
 
