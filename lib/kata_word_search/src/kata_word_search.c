@@ -100,5 +100,20 @@ char kata_word_search__search(
     WordSearch__Grid const *grid,
     Slice* out_solutions
 ){
+    if( out_solutions == NULL || out_solutions->capacity < words->length ){
+        return 0;
+    }
+
+    out_solutions->length = 0;
+
+    for( unsigned long word_index = 0; word_index < words->length; word_index++ ){
+        slice__index( out_solutions, KataWordSearch__Solution, word_index ) = kata_word_search__find_word(
+            grid,
+            &slice__index( words, Slice, word_index )
+        );
+
+        out_solutions->length += 1;
+    }
+
     return 1;
 }
