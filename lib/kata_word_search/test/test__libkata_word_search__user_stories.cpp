@@ -36,9 +36,9 @@ class KataWordSearch__UserStories__TestFixture{
         ~KataWordSearch__UserStories__TestFixture(){
             word_search__grid__clear( &grid, system_allocator.allocator );
 
-            for( unsigned long word_index = 0; word_index < words.slice.length; word_index++ ){
+            for( unsigned long word_index = 0; word_index < words.slice->length; word_index++ ){
                 slice__clear( 
-                    &slice__index( &words.slice, Slice, word_index ),
+                    &slice__index( words.slice, Slice, word_index ),
                     system_allocator.allocator
                 );
             }

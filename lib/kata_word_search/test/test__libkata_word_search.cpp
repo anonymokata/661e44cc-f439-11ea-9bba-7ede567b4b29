@@ -37,9 +37,9 @@ class KataWordSearch__TestFixture {
         ~KataWordSearch__TestFixture(){
             word_search__grid__clear( &grid, system_allocator.allocator );
 
-            for( unsigned long word_index = 0; word_index < words.slice.length; word_index++ ){
+            for( unsigned long word_index = 0; word_index < words.slice->length; word_index++ ){
                 slice__clear( 
-                    &slice__index( &words.slice, Slice, word_index ),
+                    &slice__index( words.slice, Slice, word_index ),
                     system_allocator.allocator
                 );
             }
@@ -181,21 +181,21 @@ TEST_CASE_METHOD( KataWordSearch__TestFixture, "kata_word_search__search_in_dire
     };
 
     Slice solutions;
-    slice__init( &solutions, system_allocator.allocator, sizeof( KataWordSearch__Solution ), words.slice.length );
+    slice__init( &solutions, system_allocator.allocator, sizeof( KataWordSearch__Solution ), words.slice->length );
 
     // Test whether expected solution is found
     REQUIRE( 
         kata_word_search__search_in_direction( 
-            &words.slice,
+            words.slice,
             &grid,
             WordSearch__Direction__East,
             &solutions
         )
     );
 
-    REQUIRE( solutions.length == words.slice.length );
+    REQUIRE( solutions.length == words.slice->length );
 
-    for( word_index = 0; word_index < words.slice.length; word_index++ ){
+    for( word_index = 0; word_index < words.slice->length; word_index++ ){
         REQUIRE( 
             kata_word_search__solution__equals( 
                 &slice__index( &solutions, KataWordSearch__Solution, word_index ), 
@@ -211,7 +211,7 @@ TEST_CASE_METHOD( KataWordSearch__TestFixture, "kata_word_search__search_in_dire
 
     REQUIRE_FALSE( 
         kata_word_search__search_in_direction( 
-            &words.slice,
+            words.slice,
             &grid,
             WordSearch__Direction__East,
             &solutions
@@ -221,7 +221,7 @@ TEST_CASE_METHOD( KataWordSearch__TestFixture, "kata_word_search__search_in_dire
     // Test whether parameter solutions == NULL returns 0
     REQUIRE_FALSE(
         kata_word_search__search_in_direction( 
-            &words.slice,
+            words.slice,
             &grid,
             WordSearch__Direction__East,
             NULL
@@ -421,11 +421,11 @@ TEST_CASE_METHOD( KataWordSearch__TestFixture, "kata_word_search__search", "[kat
     };
 
     Slice solutions;
-    slice__init( &solutions, system_allocator.allocator, sizeof( KataWordSearch__Solution), words.slice.length );
+    slice__init( &solutions, system_allocator.allocator, sizeof( KataWordSearch__Solution), words.slice->length );
 
-    REQUIRE( kata_word_search__search( &words.slice, &grid, &solutions ) );
+    REQUIRE( kata_word_search__search( words.slice, &grid, &solutions ) );
 
-    for( unsigned long solution_index = 0; solution_index < words.slice.length; solution_index++ ){
+    for( unsigned long solution_index = 0; solution_index < words.slice->length; solution_index++ ){
         REQUIRE( 
             kata_word_search__solution__equals( 
                 &slice__index( &solutions, KataWordSearch__Solution, solution_index ),

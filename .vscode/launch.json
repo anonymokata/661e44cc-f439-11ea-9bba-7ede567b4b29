@@ -5,8 +5,10 @@
       "name": "Debug",
       "type": "cppdbg",
       "request": "launch",
-      "program": "${workspaceFolder}/build/test__all",
-      "args": [],
+      // "program": "${workspaceFolder}/build/test__all",
+      // "args": [],
+      "program": "${workspaceFolder}/build/exec/kata_word_search/kata_word_search",
+      "args" : [ "data/sample_input.txt" ]
       "stopAtEntry": false,
       "cwd": "${workspaceFolder}",
       "environment": [],
