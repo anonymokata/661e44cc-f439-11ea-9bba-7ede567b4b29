@@ -1,8 +1,12 @@
 #ifndef WORD_SEARCH__GRID_SEQUENCE__H
 #define WORD_SEARCH__GRID_SEQUENCE__H
 
+// System Includes
+#include <stdbool.h>
+
 // 3rdParty Includes
 #include "kirke/macros.h"
+#include "kirke/string.h"
 
 // Internal Includes
 #include "word_search/grid_coordinates.h"
@@ -40,7 +44,7 @@ typedef struct WordSearch__GridSequence{
  *  \param second A pointer to the second WordSearch__GridSequence to be compared 
  *  \returns 1 if the WordSearch__GridSequence are equal, and 0 if they are not.
  */
-char word_search__grid_sequence__equals( 
+bool word_search__grid_sequence__equals( 
     WordSearch__GridSequence const *first,
     WordSearch__GridSequence const *second
 );
@@ -53,7 +57,7 @@ char word_search__grid_sequence__equals(
  *  \returns 1 if the lookup was successful, and 0 if it was not. This operation can fail if the supplied index is greater than
  *  or equal to sequence->span.magnitude. 
  */
-char word_search__grid_sequence__coordinates_of( WordSearch__GridSequence* sequence, unsigned long index, WordSearch__GridCoordinates* out_coordinates );
+bool word_search__grid_sequence__coordinates_of( WordSearch__GridSequence const *sequence, unsigned long index, WordSearch__GridCoordinates* out_coordinates );
 
 /**
  *  @} // group word_search__grid_coordinates

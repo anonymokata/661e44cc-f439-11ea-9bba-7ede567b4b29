@@ -2,7 +2,7 @@
 #include "word_search/grid.h"
 #include "word_search/grid_sequence.h"
 
-char word_search__grid_sequence__equals( 
+bool word_search__grid_sequence__equals( 
     WordSearch__GridSequence const *first,
     WordSearch__GridSequence const *second
 ){
@@ -10,15 +10,15 @@ char word_search__grid_sequence__equals(
         word_search__grid_coordinates__equals( &first->start, &second->start ) &&
         word_search__grid_vector__equals( &first->span, &second->span ) 
     ){
-        return 1;
+        return true;
     }
 
-    return 0;
+    return false;
 }
 
-char word_search__grid_sequence__coordinates_of( WordSearch__GridSequence* sequence, unsigned long index, WordSearch__GridCoordinates* out_coordinates ){
+bool word_search__grid_sequence__coordinates_of( WordSearch__GridSequence const *sequence, unsigned long index, WordSearch__GridCoordinates* out_coordinates ){
     if( index >= sequence->span.magnitude ){
-        return 0;
+        return false;
     }
 
     switch( sequence->span.direction ){
@@ -55,8 +55,8 @@ char word_search__grid_sequence__coordinates_of( WordSearch__GridSequence* seque
             out_coordinates->column = sequence->start.column + index;
             break;
         default:
-            return 0;
+            return false;
     }
 
-    return 1;
+    return true;
 }

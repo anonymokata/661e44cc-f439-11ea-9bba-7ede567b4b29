@@ -4,120 +4,66 @@
 // 3rdParty Includes
 #include "catch2/catch.hpp"
 
-#include "kirke/auto_slice.h"
-#include "kirke/slice.h"
+#include "kirke/string.h"
 #include "kirke/system_allocator.h"
 
 // Internal Includes
 #include "word_search/grid.h"
 
-TEST_CASE( "word_search__grid__init_and_clear", "[word_search__grid]" ){
-    const unsigned long GRID_WIDTH = 5;
-    const unsigned long GRID_HEIGHT = 10;
-
-    SystemAllocator system_allocator;
-    system_allocator__init( &system_allocator, NULL );
-
-    WordSearch__Grid grid;
-    word_search__grid__init( &grid, system_allocator.allocator, GRID_WIDTH, GRID_HEIGHT );
-
-    REQUIRE( grid.width == GRID_WIDTH ); 
-    REQUIRE( grid.height == GRID_HEIGHT );
-
-    REQUIRE( grid.entries.data != NULL ); 
-    REQUIRE( grid.entries.length == 0 );
-    REQUIRE( grid.entries.element_size == sizeof( char ) ); 
-    REQUIRE( grid.entries.capacity == GRID_WIDTH * GRID_HEIGHT );  
-
-    word_search__grid__clear( &grid, system_allocator.allocator );
-
-    REQUIRE( grid.width == 0 ); 
-    REQUIRE( grid.height == 0 );
-
-    REQUIRE( grid.entries.data == NULL ); 
-    REQUIRE( grid.entries.length == 0 );
-    REQUIRE( grid.entries.element_size == 0 ); 
-    REQUIRE( grid.entries.capacity == 0 );  
-
-    system_allocator__deinit( &system_allocator );
-}
-
-
 class WordSearch__Grid__TestFixture {
     protected:
 
         WordSearch__Grid__TestFixture(){
-            
-            system_allocator__init( &system_allocator, NULL );
-
-            word_search__grid__init( &grid, system_allocator.allocator, GRID_DIM, GRID_DIM );
-            memcpy( slice__data( &grid.entries, char ), GRID.data(), GRID.size() );
- 
-            auto_slice__init( &words, system_allocator.allocator, sizeof( Slice ), WORDS.size() );
-
-            for( size_t word_index = 0; word_index < WORDS.size(); word_index++ ){
-                Slice word;
-                slice__init( &word, system_allocator.allocator, sizeof( char ), WORDS[ word_index ].length() );
-                memcpy( slice__data( &word, char ), WORDS[ word_index ].c_str(), WORDS[ word_index ].length() );
-                word.length = WORDS[ word_index ].length();                
-               
-                auto_slice__append_element( &words, word );
-            }
+            grid = {
+                .width = GRID_DIM,
+                .height = GRID_DIM,
+                .entries = entries
+            };
         }
 
-        ~WordSearch__Grid__TestFixture(){
-            word_search__grid__clear( &grid, system_allocator.allocator );
+        const long GRID_DIM = 15;
 
-            for( unsigned long word_index = 0; word_index < words.slice->length; word_index++ ){
-                slice__clear( 
-                    &slice__index( words.slice, Slice, word_index ),
-                    system_allocator.allocator
-                );
-            }
-
-            auto_slice__clear( &words );
-
-            system_allocator__deinit( &system_allocator );
-        }
-
-        const unsigned long GRID_DIM = 15;
-
-        const std::vector<char> GRID = {
-            'U', 'M', 'K', 'H', 'U', 'L', 'K', 'I', 'N', 'V', 'J', 'O', 'C', 'W', 'E',
-            'L', 'L', 'S', 'H', 'K', 'Z', 'Z', 'W', 'Z', 'C', 'G', 'J', 'U', 'Y', 'G',
-            'H', 'S', 'U', 'P', 'J', 'P', 'R', 'J', 'D', 'H', 'S', 'B', 'X', 'T', 'G',
-            'B', 'R', 'J', 'S', 'O', 'E', 'Q', 'E', 'T', 'I', 'K', 'K', 'G', 'L', 'E',
-            'A', 'Y', 'O', 'A', 'G', 'C', 'I', 'R', 'D', 'Q', 'H', 'R', 'T', 'C', 'D',
-            'S', 'C', 'O', 'T', 'T', 'Y', 'K', 'Z', 'R', 'E', 'P', 'P', 'X', 'P', 'F',
-            'B', 'L', 'Q', 'S', 'L', 'N', 'E', 'E', 'E', 'V', 'U', 'L', 'F', 'M', 'Z',
-            'O', 'K', 'R', 'I', 'K', 'A', 'M', 'M', 'R', 'M', 'F', 'B', 'A', 'P', 'P',
-            'N', 'U', 'I', 'I', 'Y', 'H', 'Q', 'M', 'E', 'M', 'Q', 'R', 'Y', 'F', 'S',
-            'E', 'Y', 'Z', 'Y', 'G', 'K', 'Q', 'J', 'P', 'C', 'Q', 'W', 'Y', 'A', 'K',
-            'S', 'J', 'F', 'Z', 'M', 'Q', 'I', 'B', 'D', 'B', 'R', 'M', 'K', 'W', 'D',
-            'T', 'G', 'L', 'B', 'H', 'C', 'B', 'E', 'C', 'E', 'T', 'O', 'Y', 'I', 'F',
-            'O', 'J', 'Y', 'E', 'U', 'L', 'N', 'C', 'K', 'L', 'Y', 'B', 'Z', 'R', 'H',
-            'W', 'Z', 'M', 'I', 'S', 'U', 'K', 'I', 'R', 'B', 'I', 'D', 'O', 'X', 'S',
-            'K', 'Y', 'L', 'B', 'Q', 'Q', 'R', 'M', 'D', 'F', 'C', 'W', 'E', 'A', 'B'
+        String entries = {
+            .data = (char[]) {
+                'U', 'M', 'K', 'H', 'U', 'L', 'K', 'I', 'N', 'V', 'J', 'O', 'C', 'W', 'E',
+                'L', 'L', 'S', 'H', 'K', 'Z', 'Z', 'W', 'Z', 'C', 'G', 'J', 'U', 'Y', 'G',
+                'H', 'S', 'U', 'P', 'J', 'P', 'R', 'J', 'D', 'H', 'S', 'B', 'X', 'T', 'G',
+                'B', 'R', 'J', 'S', 'O', 'E', 'Q', 'E', 'T', 'I', 'K', 'K', 'G', 'L', 'E',
+                'A', 'Y', 'O', 'A', 'G', 'C', 'I', 'R', 'D', 'Q', 'H', 'R', 'T', 'C', 'D',
+                'S', 'C', 'O', 'T', 'T', 'Y', 'K', 'Z', 'R', 'E', 'P', 'P', 'X', 'P', 'F',
+                'B', 'L', 'Q', 'S', 'L', 'N', 'E', 'E', 'E', 'V', 'U', 'L', 'F', 'M', 'Z',
+                'O', 'K', 'R', 'I', 'K', 'A', 'M', 'M', 'R', 'M', 'F', 'B', 'A', 'P', 'P',
+                'N', 'U', 'I', 'I', 'Y', 'H', 'Q', 'M', 'E', 'M', 'Q', 'R', 'Y', 'F', 'S',
+                'E', 'Y', 'Z', 'Y', 'G', 'K', 'Q', 'J', 'P', 'C', 'Q', 'W', 'Y', 'A', 'K',
+                'S', 'J', 'F', 'Z', 'M', 'Q', 'I', 'B', 'D', 'B', 'R', 'M', 'K', 'W', 'D',
+                'T', 'G', 'L', 'B', 'H', 'C', 'B', 'E', 'C', 'E', 'T', 'O', 'Y', 'I', 'F',
+                'O', 'J', 'Y', 'E', 'U', 'L', 'N', 'C', 'K', 'L', 'Y', 'B', 'Z', 'R', 'H',
+                'W', 'Z', 'M', 'I', 'S', 'U', 'K', 'I', 'R', 'B', 'I', 'D', 'O', 'X', 'S',
+                'K', 'Y', 'L', 'B', 'Q', 'Q', 'R', 'M', 'D', 'F', 'C', 'W', 'E', 'A', 'B'
+            },
+            .length = 175,
+            .capacity = 175,
+            .element_size = 1
         };
 
-        const std::vector<std::string> WORDS = {
-            "SCOTTY",
-            "SPOCK",
-            "BONES",
-            "UHURA",
-            "KIRK",
-            "SULU",
-            "KHAN",
-            "WORF",
-            "RIKER",
+        Array__String words = {
+            .data = (String*) (const String[]) {
+                string__literal( "SCOTTY" ),
+                string__literal( "SPOCK" ),
+                string__literal( "BONES" ),
+                string__literal( "UHURA" ),
+                string__literal( "KIRK" ),
+                string__literal( "SULU" ),
+                string__literal( "KHAN" ),
+                string__literal( "WORF" )
+            },
+            .length = 8,
+            .capacity = 8,
+            .element_size = sizeof( String )
         };
 
         WordSearch__Grid grid;
-
-        SystemAllocator system_allocator;
-        AutoSlice words;
 };
-
 
 TEST_CASE_METHOD( WordSearch__Grid__TestFixture, "word_search__grid__contains", "[word_search__grid]" ){
     WordSearch__GridCoordinates current_coordinates;
@@ -184,7 +130,7 @@ TEST_CASE_METHOD( WordSearch__Grid__TestFixture, "word_search__grid__lookup_sequ
     char entry;
     for( unsigned long entry_index = 0; entry_index < GRID_DIM; entry_index++ ){
         REQUIRE( word_search__grid__lookup_sequence_entry( &grid, &sequence, entry_index, &entry ) );
-        REQUIRE( entry == GRID[ entry_index * GRID_DIM + entry_index ] );
+        REQUIRE( entry == entries.data[ entry_index * GRID_DIM + entry_index ] );
     }
 
     // Test whether index >= sequence.span.magnitude returns 0.
@@ -197,9 +143,8 @@ TEST_CASE_METHOD( WordSearch__Grid__TestFixture, "word_search__grid__lookup_sequ
     // Just for fun, make sure that even if part of the sequence is off the grid, if the entry we want is on the grid, 
     // we still get the desired value.
     REQUIRE( word_search__grid__lookup_sequence_entry( &grid, &sequence, 1, &entry ) );
-    REQUIRE( entry == GRID[ 0 ] );
+    REQUIRE( entry == entries.data[ 0 ] );
 }
-
 
 TEST_CASE_METHOD( WordSearch__Grid__TestFixture, "word_search__grid__sequence_matches_word", "[word_search__grid]" ){
     WordSearch__GridSequence sequences[] = {
@@ -304,12 +249,12 @@ TEST_CASE_METHOD( WordSearch__Grid__TestFixture, "word_search__grid__sequence_ma
         }
     };
 
-    for( unsigned long word_index = 0; word_index < words.slice->length; word_index++ ){
+    for( unsigned long word_index = 0; word_index < words.length; word_index++ ){
         REQUIRE( 
             word_search__grid__sequence_matches_word( 
                 &grid,
                 &sequences[ word_index ],
-                &slice__index( words.slice, Slice, word_index )
+                &words.data[ word_index ]
             ) == 1
         );
     }

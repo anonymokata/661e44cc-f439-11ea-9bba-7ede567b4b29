@@ -1,6 +1,9 @@
 #ifndef WORD_SEARCH__GRID_COORDINATES__H
 #define WORD_SEARCH__GRID_COORDINATES__H
 
+// System Includes
+#include <stdbool.h>
+
 // 3rdParty Includes
 #include "kirke/macros.h"
 
@@ -39,7 +42,7 @@ typedef struct WordSearch__GridCoordinates {
  *  \param second A pointer to the second WordSearch__GridCoordinates to be compared 
  *  \returns 1 if the WordSearch__GridCoordinates are equal, and 0 if they are not.
  */
-char word_search__grid_coordinates__equals(
+bool word_search__grid_coordinates__equals(
     WordSearch__GridCoordinates const *first,
     WordSearch__GridCoordinates const *second
 );

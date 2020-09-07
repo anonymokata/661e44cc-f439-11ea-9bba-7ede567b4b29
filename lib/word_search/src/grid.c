@@ -1,29 +1,17 @@
 // Internal Includes
 #include "word_search/grid.h"
 
-void word_search__grid__init( WordSearch__Grid* grid, Allocator* allocator, unsigned long width, unsigned long height ){
-    grid->width = width;
-    grid->height = height;
-    slice__init( &grid->entries, allocator, sizeof( char ), width * height );
-}
-
-void word_search__grid__clear( WordSearch__Grid* grid, Allocator* allocator ){
-    grid->width = 0;
-    grid->height = 0;
-    slice__clear( &grid->entries, allocator );
-}
-
-char word_search__grid__contains( WordSearch__Grid const *grid, WordSearch__GridCoordinates const *coordinates ){
+bool word_search__grid__contains( WordSearch__Grid const *grid, WordSearch__GridCoordinates const *coordinates ){
     if( 
         coordinates->row >= 0 &&
         coordinates->row < grid->height &&
         coordinates->column >= 0 &&
         coordinates->column < grid->width
     ){
-        return 1;
+        return true;
     }
 
-    return 0;
+    return false;
 }
 
 char word_search__grid__entry( 
@@ -31,20 +19,20 @@ char word_search__grid__entry(
     WordSearch__GridCoordinates const *coordinates
 ){
     if( word_search__grid__contains( grid, coordinates ) ){
-        return slice__index( &grid->entries, char, coordinates->row * grid->width + coordinates->column );
+        return grid->entries.data[ ( coordinates->row * grid->width ) + coordinates->column ];
     }
 
     return '\0';
 }
 
-char word_search__grid__lookup_sequence_entry( 
+bool word_search__grid__lookup_sequence_entry( 
     WordSearch__Grid const *grid,
     WordSearch__GridSequence const* sequence,
     unsigned long index,
     char* out_entry
 ){
     if( index >= sequence->span.magnitude ){
-        return 0;
+        return false;
     }
 
     WordSearch__GridCoordinates current_coordinates = word_search__grid_coordinates__translate(
@@ -56,34 +44,34 @@ char word_search__grid__lookup_sequence_entry(
     );
 
     if( word_search__grid__contains( grid, &current_coordinates ) == 0 ){
-        return 0;
+        return false;
     }
 
     *out_entry = word_search__grid__entry( grid, &current_coordinates );
-    return 1;
+    return true;
 }
 
-char word_search__grid__sequence_matches_word(
+bool word_search__grid__sequence_matches_word(
     WordSearch__Grid const *grid,
     WordSearch__GridSequence const *sequence,
-    Slice const *word
+    String const *word
 ){
     if( sequence->span.magnitude != word->length ){
-        return 0;
+        return false;
     }
 
     for( unsigned long character_index = 0; character_index < word->length; character_index++ ){
         char entry;
         if( word_search__grid__lookup_sequence_entry( grid, sequence, character_index, &entry ) == 0 ){
-            return 0;
+            return false;
         }
 
-        char letter = slice__index( word, char, character_index );
+        char letter = word->data[ character_index ];
 
         if( entry != letter ){
-            return 0;
+            return false;
         }
     }
 
-    return 1;
+    return true;
 }

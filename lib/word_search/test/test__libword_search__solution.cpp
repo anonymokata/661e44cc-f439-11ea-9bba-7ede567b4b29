@@ -2,11 +2,11 @@
 #include "catch2/catch.hpp"
 
 // Internal Includes
-#include "kata_word_search/solution.h"
+#include "word_search/solution.h"
 
-TEST_CASE( "kata_word_search__solution__equals", "[kata_word_search__solution]" ){
-    KataWordSearch__Solution first = {
-        .word = slice__string_literal( "Word1" ),
+TEST_CASE( "word_search__solution__equals", "[word_search__solution]" ){
+    WordSearch__Solution first = {
+        .word = string__literal( "Word1" ),
         .disposition = WordSearch__Solution__Disposition__Found,
         .sequence = {
             .start = {
@@ -20,8 +20,8 @@ TEST_CASE( "kata_word_search__solution__equals", "[kata_word_search__solution]" 
         }
     };
 
-    KataWordSearch__Solution second = {
-        .word = slice__string_literal( "Word2" ),
+    WordSearch__Solution second = {
+        .word = string__literal( "Word2" ),
         .disposition = WordSearch__Solution__Disposition__NotFound,
         .sequence = {
             .start = {
@@ -35,6 +35,6 @@ TEST_CASE( "kata_word_search__solution__equals", "[kata_word_search__solution]" 
         }
     };
 
-    REQUIRE( kata_word_search__solution__equals( &first, &first ) == 1 );
-    REQUIRE( kata_word_search__solution__equals( &first, &second ) == 0 );
+    REQUIRE( word_search__solution__equals( &first, &first ) == 1 );
+    REQUIRE( word_search__solution__equals( &first, &second ) == 0 );
 }

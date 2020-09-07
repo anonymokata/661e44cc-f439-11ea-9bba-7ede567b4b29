@@ -1,7 +1,7 @@
 // Internal Includes
 #include "word_search/grid_vector.h"
 
-char word_search__grid_vector__equals(
+bool word_search__grid_vector__equals(
     WordSearch__GridVector const *first,
     WordSearch__GridVector const *second
 ){
@@ -9,8 +9,8 @@ char word_search__grid_vector__equals(
         first->direction == second->direction &&
         first->magnitude == second->magnitude
     ){
-        return 1;
+        return true;
     }
 
-    return 0;
+    return false;
 }

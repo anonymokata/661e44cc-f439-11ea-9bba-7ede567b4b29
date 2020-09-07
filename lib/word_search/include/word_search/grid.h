@@ -1,9 +1,12 @@
 #ifndef WORD_SEARCH__GRID__H
 #define WORD_SEARCH__GRID__H
 
+// System Includes
+#include <stdbool.h>
+
 // 3rdParty Includes
 #include "kirke/macros.h"
-#include "kirke/slice.h"
+#include "kirke/string.h"
 
 // Internal Includes
 #include "word_search/grid_coordinates.h"
@@ -33,47 +36,27 @@ typedef struct Allocator Allocator;
  */
 typedef struct WordSearch__Grid {
     /** The width of the grid, in entries */
-    unsigned long width;
+    long width;
     /** The height of the grid, in entries */
-    unsigned long height;
+    long height;
     /** 
-     *  A pointer to a Slice containing an array of characters. Slice length should always be 
+     *  A pointer to a String containing the grid's entries. The length of this field should always be 
      *  width * height. The grid is laid out in row-major format, that is entries are 0-indexed 
-     *  from the top-left corner of the grid, and can be accessed by (row, column) coordinate pair. 
-     *  Accessing individual entries by (row, column) coordinate pair can be acheived by calling 
-     *      slice__index( entries, char, ( row * width  ) + column )
-     *  or by calling the convenience method word_search__grid__entry.
+     *  from the top-left corner of the grid, and can be accessed by (row, column) coordinate pair, as in
+     *      char entry = grid->entries.data[ ( row * width ) + column ], OR
+     *  by calling the convenience method word_search__grid__entry.
      */
-    Slice entries;
+    String entries;
 } WordSearch__Grid;
-
-/**
- *  \brief This method initializes a WordSearch__Grid structure. After initialization, memory is allocated for storage of
- *  entries in the grid, but no entries have been added.  To add entries to the grid, call 
- *      auto_slice__append_element( &grid->entries, <entry_value> );
- *  \param grid A pointer to the WordSearch__Grid to be initialized.
- *  \param allocator The allocator which will be used for managing memory controlled by the grid.
- *  \param width The width of the grid, in entries.
- *  \param height The height of the grid, in entries.
- */
-void word_search__grid__init( WordSearch__Grid* grid, Allocator* allocator, unsigned long width, unsigned long height );
-
-/** 
- *  \brief This method clears a previously-initialized WordSearch__Grid structure. All memory controlled by the grid will be 
- *  released, but the grid structure itself will not be freed.
- *  \param grid A pointer to the WordSearch__Grid to be cleared.
- *  \param allocator A pointer to the allocator used to manage memory controlled by the grid.
- */
-void word_search__grid__clear( WordSearch__Grid* grid, Allocator* allocator );
 
 /**
  *  \brief This method determines whether the given WordSearch__GridCoordinates reside within the grid.
  *  \param grid The grid upon which the supplied WordSearch__GridCoordinates will be tested.
  *  \param coordinates The WordSearch__GridCoordinates which will be tested.
- *  \returns 1 if \p coordinates does reside within the grid. That is, coordinates->row < grid->height and 
- *  coordinates->column < grid->width.  Returns 0 otherwise.
+ *  \returns true if \p coordinates does reside within the grid. That is, coordinates->row < grid->height and 
+ *  coordinates->column < grid->width.  Returns false otherwise.
  */
-char word_search__grid__contains( WordSearch__Grid const *grid, WordSearch__GridCoordinates const *coordinates );
+bool word_search__grid__contains( WordSearch__Grid const *grid, WordSearch__GridCoordinates const *coordinates );
 
 /**
  *  \brief Convenience method to retrieve the value of the WordSearch__Grid at the specified (row, column)
@@ -93,11 +76,11 @@ char word_search__grid__entry( WordSearch__Grid const *grid, WordSearch__GridCoo
  *  \param index The index into the sequence of the desired entry.
  *  \param out_entry An out parameter. Upon successful completion, this will be assigned to the value of the
  *  desired entry.
- *  \returns 1 if the lookup was successful, and 0 otherwise. The lookup can fail if either the index is
+ *  \returns true if the lookup was successful, and false otherwise. The lookup can fail if either the index is
  *  greater than or equal to sequence->span.magnitude, or if the corresponding entry is not contained by the
  *  grid.
  */
-char word_search__grid__lookup_sequence_entry( 
+bool word_search__grid__lookup_sequence_entry( 
     WordSearch__Grid const *grid,
     WordSearch__GridSequence const* sequence,
     unsigned long index,
@@ -108,13 +91,13 @@ char word_search__grid__lookup_sequence_entry(
  *  \brief This method determines whether the supplied sequence of grid entries represents the supplied word.
  *  \param grid A pointer to the WordSearch__Grid containing the entries described by \p sequence.
  *  \param sequence A pointer to the WordSearch__GridSequence describing the entries of interest on the grid.
- *  \param word A pointer to the word, represented by a Slice<char> which will be matched to the grid entries.
- *  \returns 1 if the entries described by \p sequence exactly match the supplied word, and 0 if they do not match.
+ *  \param word A pointer a String containing the word which will be matched to the grid sequence.
+ *  \returns true if the entries described by \p sequence exactly match the supplied word, and false if they do not match.
  */
-char word_search__grid__sequence_matches_word( 
+bool word_search__grid__sequence_matches_word( 
     WordSearch__Grid const *grid,
     WordSearch__GridSequence const *sequence,
-    Slice const *word
+    String const *word
 );
 
 /*

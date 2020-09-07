@@ -1,0 +1,122 @@
+// Internal Includes
+#include "word_search/word_search.h"
+#include "word_search/solution.h"
+
+bool word_search__find_word_in_direction(
+    WordSearch__Grid const *grid, 
+    String const *word, 
+    WordSearch__Direction direction, 
+    WordSearch__GridSequence *out_sequence 
+){
+    if( out_sequence == NULL ){
+        return false;
+    }
+
+    for( long row_index = 0; row_index < grid->height; row_index++ ){
+
+        for( long column_index = 0; column_index < grid->width; column_index++ ){
+
+            WordSearch__GridSequence current_sequence = {
+                .start = {
+                    .row = row_index,
+                    .column = column_index
+                },
+                .span = {
+                    .magnitude = word->length,
+                    .direction = direction
+                }
+            };
+
+            if( word_search__grid__sequence_matches_word( grid, &current_sequence, word ) ){
+                *out_sequence = current_sequence;
+                return true;
+            }
+        }        
+    }
+
+    return false;
+}
+
+bool word_search__search_in_direction( 
+    Array__String const *words, 
+    WordSearch__Grid const *grid,
+    WordSearch__Direction direction,
+    Array__WordSearch__Solution* out_solutions
+){
+    if( out_solutions == NULL || out_solutions->capacity < words->length ){
+        return false;
+    }
+
+    out_solutions->length = 0;
+
+    for( unsigned long word_index = 0; word_index < words->length; word_index++ ){
+
+        String word = words->data[ word_index ]; 
+
+        WordSearch__GridSequence matching_sequence;
+        WordSearch__Solution solution;
+        
+        if( word_search__find_word_in_direction( grid, &word, direction, &matching_sequence ) ){
+            solution = (WordSearch__Solution) {
+                .word = words->data[ word_index ],
+                .disposition = WordSearch__Solution__Disposition__Found,
+                .sequence = matching_sequence
+            };
+        }
+        else{
+            solution = (WordSearch__Solution) {
+                .word = words->data[ word_index ],
+                .disposition = WordSearch__Solution__Disposition__NotFound
+            };
+        }
+
+        memcpy( out_solutions->data + word_index, &solution, sizeof( WordSearch__Solution ) );
+        out_solutions->length += 1;
+    }
+
+    return true;
+}
+
+WordSearch__Solution word_search__find_word(
+    WordSearch__Grid const *grid,
+    String const *word
+){
+    WordSearch__GridSequence sequence;
+    for( unsigned long direction_index = 0; direction_index < WordSearch__Direction__COUNT; direction_index++ ){
+        if( word_search__find_word_in_direction( grid, word, direction_index, &sequence ) ){
+            return (WordSearch__Solution) {
+                .word = *word,
+                .disposition = WordSearch__Solution__Disposition__Found,
+                .sequence = sequence
+            };
+        }
+    }
+
+    return (WordSearch__Solution) {
+        .word = *word,
+        .disposition = WordSearch__Solution__Disposition__NotFound
+    };
+}
+
+bool word_search__search(
+    Array__String const *words,
+    WordSearch__Grid const *grid,
+    Array__WordSearch__Solution* out_solutions
+){
+    if( out_solutions == NULL || out_solutions->capacity < words->length ){
+        return false;
+    }
+
+    out_solutions->length = 0;
+
+    for( unsigned long word_index = 0; word_index < words->length; word_index++ ){
+        out_solutions->data[ word_index ] = word_search__find_word(
+            grid,
+            &words->data[ word_index ]
+        );
+
+        out_solutions->length += 1;
+    }
+
+    return true;
+}

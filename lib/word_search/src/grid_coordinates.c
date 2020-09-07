@@ -48,7 +48,7 @@ WordSearch__GridCoordinates word_search__grid_coordinates__translate( WordSearch
     }
 }
 
-char word_search__grid_coordinates__equals( 
+bool word_search__grid_coordinates__equals( 
     WordSearch__GridCoordinates const *first,
     WordSearch__GridCoordinates const *second
 ){
@@ -56,8 +56,8 @@ char word_search__grid_coordinates__equals(
         first->row == second->row &&
         first->column == second->column 
     ){
-        return 1;
+        return true;
     }
 
-    return 0;
+    return false;
 }
