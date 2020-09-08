@@ -3,7 +3,6 @@ set( kata_word_search__DIR "${CMAKE_CURRENT_LIST_DIR}" )
 add_executable(
     kata_word_search
     ${kata_word_search__DIR}/src/parser.c
-    ${kata_word_search__DIR}/src/printf_specializations.c
     ${kata_word_search__DIR}/src/main.c
 )
 

@@ -15,13 +15,6 @@
 #include "word_search/solution.h"
 
 #include "parser.h"
-#include "printf_specializations.h"
-
-// Ignore Warning: unknown conversion type character which is thrown because of our printf specializations
-#pragma GCC diagnostic ignored "-Wformat"
-
-// Ignore Warning: too many arguments for format which is thrown because of our printf specializations
-#pragma GCC diagnostic ignored "-Wformat-extra-args"
 
 /**
  *  These are all of the declarations which will hold dynamic memory
@@ -75,11 +68,35 @@ static void print_usage(){
     exit( EXIT_SUCCESS );
 }
 
+static void print_solution( WordSearch__Solution *solution ){
+    fwrite( solution->word.data, sizeof( char ), solution->word.length, stdout );
+    fprintf( stdout, ":\t" );
+    
+    if( solution->disposition == WordSearch__Solution__Disposition__Found ){
+        WordSearch__GridCoordinates entry_coordinates;
+        for( 
+            unsigned long long entry_index = 0; 
+            word_search__grid_sequence__coordinates_of( &solution->sequence, entry_index, &entry_coordinates );
+            entry_index++
+        ){
+            fprintf( stdout, "( %ld, %ld )", entry_coordinates.column, entry_coordinates.row );
+        
+            if( entry_index < solution->sequence.span.magnitude - 1 ){
+                fprintf( stdout, ", " );
+            }
+            else{
+                fprintf( stdout, "\n" );
+            }
+        }
+    }
+    else{
+        fprintf( stdout, "NOT FOUND\n" );
+    }
+}
+
 int main( int argc, char* argv[] ){
     //log__set_log_level( Log__Level__Debug );
     log__set_log_level( Log__Level__Warning );
-    
-    printf_specializations__register();
 
     system_allocator__initialize( &system_allocator, out_of_memory );
 
@@ -111,9 +128,6 @@ int main( int argc, char* argv[] ){
         exit( EXIT_FAILURE );
     }
 
-    log__debug( "Parsed words:\t%A", &words );
-    log__debug( "Parsed grid:\n%G", &grid );
-
     /*
      *  Actually run the search!
      */
@@ -124,7 +138,7 @@ int main( int argc, char* argv[] ){
          *  Print results of the search
          */
         for( unsigned long solution_index = 0; solution_index < solutions.length; solution_index++ ){
-            printf( "%K\n", &solutions.data[ solution_index ] );
+            print_solution( &solutions.data[ solution_index ] );
         }
     }
 
