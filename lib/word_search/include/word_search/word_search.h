@@ -41,6 +41,21 @@ WordSearch__Solution word_search__find_word(
 );
 
 /**
+ *  \brief This method searches the grid for the given words, and returns a solution for each.
+ *  \param words A pointer to an Array__String containing the list of the words to be found in the \p grid.
+ *  \param grid The grid in which to search for the words contained in \p words.
+ *  \param out_solutions A pointer to a pre-allocated Array__WordSearch__Solution. The capacity should be equal to
+ *  the length of \p words.
+ *  \returns true if the search was completed successfully, and false otherwise. The search can fail if \p out_solutions is NULL,
+ *  or if it lacks the required capacity to hold solutions for every word.  
+ */
+bool word_search__search(
+    Array__String const *words,
+    WordSearch__Grid const *grid,
+    Array__WordSearch__Solution* out_solutions
+);
+
+/**
  *  \brief This method searches the grid in the given direction for the given word.
  *  \param grid A pointer to the WordSearch__Grid in which to search.
  *  \param word A pointer a String containing the word to search for.
@@ -49,7 +64,7 @@ WordSearch__Solution word_search__find_word(
  *  the sequence whose entries match the letters of \p word.  
  *  \returns true if the word was found, and false otherwise.
  */
-bool word_search__find_word_in_direction( 
+bool word_search__find_word_in_direction__brute_force( 
     WordSearch__Grid const *grid, 
     String const *word, 
     WordSearch__Direction direction, 
@@ -66,7 +81,7 @@ bool word_search__find_word_in_direction(
  *  \returns true if the search was completed successfully, false otherwise.  The search can fail if \p out_solutions is NULL or
  *  lacks the required capacity to hold solutions for every word.
  */
-bool word_search__search_in_direction( 
+bool word_search__search_in_direction__brute_force( 
     Array__String const *words, 
     WordSearch__Grid const *grid,
     WordSearch__Direction direction,
@@ -82,7 +97,7 @@ bool word_search__search_in_direction(
  *  \returns true if the search was completed successfully, and false otherwise. The search can fail if \p out_solutions is NULL,
  *  or if it lacks the required capacity to hold solutions for every word.  
  */
-bool word_search__search(
+bool word_search__search__brute_force(
     Array__String const *words,
     WordSearch__Grid const *grid,
     Array__WordSearch__Solution* out_solutions

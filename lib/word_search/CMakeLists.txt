@@ -2,6 +2,7 @@ set( libword_search__DIR "${CMAKE_CURRENT_LIST_DIR}" )
 
 add_library(
     libword_search
+    ${libword_search__DIR}/src/direction.c    
     ${libword_search__DIR}/src/grid.c
     ${libword_search__DIR}/src/grid_coordinates.c
     ${libword_search__DIR}/src/grid_sequence.c

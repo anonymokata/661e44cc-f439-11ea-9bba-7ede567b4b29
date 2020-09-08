@@ -47,7 +47,16 @@ typedef struct WordSearch__Grid {
      *  by calling the convenience method word_search__grid__entry.
      */
     String entries;
+
+    /**
+     * 
+     */
+    Array__WordSearch__GridCoordinates *entry_coordinates_by_value[ 26 ];
 } WordSearch__Grid;
+
+void word_search__grid__initialize( WordSearch__Grid *grid, Allocator* allocator, long width, long height, String *entries );
+
+void word_search__grid__clear( WordSearch__Grid *grid, Allocator *allocator );
 
 /**
  *  \brief This method determines whether the given WordSearch__GridCoordinates reside within the grid.
@@ -98,6 +107,13 @@ bool word_search__grid__sequence_matches_word(
     WordSearch__Grid const *grid,
     WordSearch__GridSequence const *sequence,
     String const *word
+);
+
+void word_search__grid__get_candidate_coordinates( 
+    WordSearch__Grid const *grid, 
+    String const *word, 
+    Array__WordSearch__GridCoordinates **candidates, 
+    unsigned long *candidate_character_index 
 );
 
 /*

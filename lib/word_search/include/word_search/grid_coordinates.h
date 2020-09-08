@@ -5,6 +5,7 @@
 #include <stdbool.h>
 
 // 3rdParty Includes
+#include "kirke/array.h"
 #include "kirke/macros.h"
 
 // Internal Includes
@@ -34,6 +35,8 @@ typedef struct WordSearch__GridCoordinates {
      */
     long column;
 } WordSearch__GridCoordinates;
+
+ARRAY__DECLARE( Array__WordSearch__GridCoordinates, array__word_search__grid_coordinates, WordSearch__GridCoordinates )
 
 /**
  *  \brief Compares two WordSearch__GridCoordinates for equality

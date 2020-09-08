@@ -18,20 +18,23 @@ class WordSearch__UserStories__TestFixture{
         WordSearch__UserStories__TestFixture(){
             system_allocator__initialize( &system_allocator, NULL );
 
-            grid = {
-                .width = (long) GRID_DIM,
-                .height = (long) GRID_DIM,
-                .entries = entries
-            };
+            word_search__grid__initialize( 
+                &grid,
+                system_allocator.allocator,
+                GRID_DIM,
+                GRID_DIM,
+                string__clone( &ENTRIES, system_allocator.allocator )
+            );
         }
 
         ~WordSearch__UserStories__TestFixture(){
+            word_search__grid__clear( &grid, system_allocator.allocator );
             system_allocator__deinitialize( &system_allocator );
         }
 
         const unsigned long GRID_DIM = 15;
 
-        String entries = {
+        String ENTRIES = {
             .data = (char[]) {
                 'U', 'M', 'K', 'H', 'U', 'L', 'K', 'I', 'N', 'V', 'J', 'O', 'C', 'W', 'E',
                 'L', 'L', 'S', 'H', 'K', 'Z', 'Z', 'W', 'Z', 'C', 'G', 'J', 'U', 'Y', 'G',
@@ -95,7 +98,7 @@ SCENARIO_METHOD(
             Array__WordSearch__Solution solutions;
             array__word_search__solution__initialize( &solutions, system_allocator.allocator, 1 );
 
-            char success = word_search__search_in_direction(
+            char success = word_search__search_in_direction__brute_force(
                 &words,
                 &grid,
                 WordSearch__Direction__East,
@@ -155,7 +158,7 @@ SCENARIO_METHOD(
             Array__WordSearch__Solution solutions;
             array__word_search__solution__initialize( &solutions, system_allocator.allocator, 1 );
 
-            char success = word_search__search_in_direction(
+            char success = word_search__search_in_direction__brute_force(
                 &words,
                 &grid,
                 WordSearch__Direction__SouthEast,
@@ -215,7 +218,7 @@ SCENARIO_METHOD(
             Array__WordSearch__Solution solutions;
             array__word_search__solution__initialize( &solutions, system_allocator.allocator, 1 );
 
-            char success = word_search__search_in_direction(
+            char success = word_search__search_in_direction__brute_force(
                 &words,
                 &grid,
                 WordSearch__Direction__South,
@@ -275,7 +278,7 @@ SCENARIO_METHOD(
             Array__WordSearch__Solution solutions;
             array__word_search__solution__initialize( &solutions, system_allocator.allocator, 1 );
 
-            char success = word_search__search_in_direction(
+            char success = word_search__search_in_direction__brute_force(
                 &words,
                 &grid,
                 WordSearch__Direction__SouthWest,
@@ -335,7 +338,7 @@ SCENARIO_METHOD(
             Array__WordSearch__Solution solutions;
             array__word_search__solution__initialize( &solutions, system_allocator.allocator, 1 );
 
-            char success = word_search__search_in_direction(
+            char success = word_search__search_in_direction__brute_force(
                 &words,
                 &grid,
                 WordSearch__Direction__West,
@@ -395,7 +398,7 @@ SCENARIO_METHOD(
             Array__WordSearch__Solution solutions;
             array__word_search__solution__initialize( &solutions, system_allocator.allocator, 1 );
 
-            char success = word_search__search_in_direction(
+            char success = word_search__search_in_direction__brute_force(
                 &words,
                 &grid,
                 WordSearch__Direction__NorthWest,
@@ -455,7 +458,7 @@ SCENARIO_METHOD(
             Array__WordSearch__Solution solutions;
             array__word_search__solution__initialize( &solutions, system_allocator.allocator, 1 );
 
-            char success = word_search__search_in_direction(
+            char success = word_search__search_in_direction__brute_force(
                 &words,
                 &grid,
                 WordSearch__Direction__North,
@@ -516,7 +519,7 @@ SCENARIO_METHOD(
             Array__WordSearch__Solution solutions;
             array__word_search__solution__initialize( &solutions, system_allocator.allocator, 2 );
 
-            char success = word_search__search_in_direction(
+            char success = word_search__search_in_direction__brute_force(
                 &words,
                 &grid,
                 WordSearch__Direction__NorthEast,

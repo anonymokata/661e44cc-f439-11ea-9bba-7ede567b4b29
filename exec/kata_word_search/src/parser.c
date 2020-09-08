@@ -105,11 +105,7 @@ static bool parse_grid( String *grid_input, Allocator *allocator, WordSearch__Gr
         }
     } while( split_iterator__next( &line_iterator, &line ) );
 
-    *grid = (WordSearch__Grid) {
-        .width = width,
-        .height = height,
-        .entries = entries
-    };
+    word_search__grid__initialize( grid, allocator, width, height, &entries );
 
     return true;
 }

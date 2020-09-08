@@ -44,6 +44,8 @@ typedef enum WordSearch__Direction {
     WordSearch__Direction__COUNT
 } WordSearch__Direction;
 
+WordSearch__Direction word_search__direction__opposite( WordSearch__Direction direction );
+
 /*
  *  @} group word_search__direction
  *  @} // group word_search

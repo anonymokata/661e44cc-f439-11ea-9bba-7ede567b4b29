@@ -33,6 +33,30 @@ Array__String words = {0};
 WordSearch__Grid grid = {0};
 Array__WordSearch__Solution solutions = {0};
 
+static void cleanup(){
+    /*
+     *  Clean up allocated memory
+     */
+    if( puzzle_input != NULL ){
+        string__clear( puzzle_input, system_allocator.allocator );
+        allocator__free( system_allocator.allocator, puzzle_input );
+    }
+
+    if( words.data != NULL ){
+        array__string__clear( &words, system_allocator.allocator );
+    }
+
+    if( grid.entries.data != NULL ){
+        word_search__grid__clear( &grid, system_allocator.allocator );
+    }
+
+    if( solutions.data != NULL ){
+        array__word_search__solution__clear( &solutions, system_allocator.allocator );
+    }
+
+    system_allocator__deinitialize( &system_allocator );
+}
+
 static void out_of_memory( void ){
     printf( "Out of memory, exiting." );
     cleanup();
@@ -49,30 +73,6 @@ static void print_usage(){
     );
     cleanup();
     exit( EXIT_SUCCESS );
-}
-
-static void cleanup(){
-    /*
-     *  Clean up allocated memory
-     */
-    if( puzzle_input != NULL ){
-        string__clear( puzzle_input, system_allocator.allocator );
-        allocator__free( system_allocator.allocator, puzzle_input );
-    }
-
-    if( words.data != NULL ){
-        array__string__clear( &words, system_allocator.allocator );
-    }
-
-    if( grid.entries.data != NULL ){
-        string__clear( &grid.entries, system_allocator.allocator );
-    }
-
-    if( solutions.data != NULL ){
-        array__word_search__solution__clear( &solutions, system_allocator.allocator );
-    }
-
-    system_allocator__deinitialize( &system_allocator );
 }
 
 int main( int argc, char* argv[] ){
@@ -129,4 +129,6 @@ int main( int argc, char* argv[] ){
     }
 
     cleanup();
+
+    exit( EXIT_SUCCESS );
 }

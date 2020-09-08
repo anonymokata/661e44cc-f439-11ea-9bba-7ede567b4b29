@@ -14,17 +14,28 @@ class WordSearch__Grid__TestFixture {
     protected:
 
         WordSearch__Grid__TestFixture(){
-            grid = {
-                .width = GRID_DIM,
-                .height = GRID_DIM,
-                .entries = entries
-            };
+            system_allocator__initialize( &system_allocator, NULL );
+
+            word_search__grid__initialize( 
+                &grid,
+                system_allocator.allocator,
+                GRID_DIM,
+                GRID_DIM,
+                string__clone( &ENTRIES, system_allocator.allocator ) 
+            );
         }
+
+        ~WordSearch__Grid__TestFixture(){
+            word_search__grid__clear( &grid, system_allocator.allocator );
+            system_allocator__deinitialize( &system_allocator );
+        }
+
+        SystemAllocator system_allocator;
 
         const long GRID_DIM = 15;
 
-        String entries = {
-            .data = (char[]) {
+        String ENTRIES = {
+            .data = (char[ 225 ]) {
                 'U', 'M', 'K', 'H', 'U', 'L', 'K', 'I', 'N', 'V', 'J', 'O', 'C', 'W', 'E',
                 'L', 'L', 'S', 'H', 'K', 'Z', 'Z', 'W', 'Z', 'C', 'G', 'J', 'U', 'Y', 'G',
                 'H', 'S', 'U', 'P', 'J', 'P', 'R', 'J', 'D', 'H', 'S', 'B', 'X', 'T', 'G',
@@ -41,8 +52,8 @@ class WordSearch__Grid__TestFixture {
                 'W', 'Z', 'M', 'I', 'S', 'U', 'K', 'I', 'R', 'B', 'I', 'D', 'O', 'X', 'S',
                 'K', 'Y', 'L', 'B', 'Q', 'Q', 'R', 'M', 'D', 'F', 'C', 'W', 'E', 'A', 'B'
             },
-            .length = 175,
-            .capacity = 175,
+            .length = 225,
+            .capacity = 225,
             .element_size = 1
         };
 
@@ -130,7 +141,7 @@ TEST_CASE_METHOD( WordSearch__Grid__TestFixture, "word_search__grid__lookup_sequ
     char entry;
     for( unsigned long entry_index = 0; entry_index < GRID_DIM; entry_index++ ){
         REQUIRE( word_search__grid__lookup_sequence_entry( &grid, &sequence, entry_index, &entry ) );
-        REQUIRE( entry == entries.data[ entry_index * GRID_DIM + entry_index ] );
+        REQUIRE( entry == ENTRIES.data[ entry_index * GRID_DIM + entry_index ] );
     }
 
     // Test whether index >= sequence.span.magnitude returns 0.
@@ -143,7 +154,7 @@ TEST_CASE_METHOD( WordSearch__Grid__TestFixture, "word_search__grid__lookup_sequ
     // Just for fun, make sure that even if part of the sequence is off the grid, if the entry we want is on the grid, 
     // we still get the desired value.
     REQUIRE( word_search__grid__lookup_sequence_entry( &grid, &sequence, 1, &entry ) );
-    REQUIRE( entry == entries.data[ 0 ] );
+    REQUIRE( entry == ENTRIES.data[ 0 ] );
 }
 
 TEST_CASE_METHOD( WordSearch__Grid__TestFixture, "word_search__grid__sequence_matches_word", "[word_search__grid]" ){

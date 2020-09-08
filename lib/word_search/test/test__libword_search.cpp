@@ -2,6 +2,7 @@
 #include <string.h>
 
 // 3rdParty Includes
+#define CATCH_CONFIG_ENABLE_BENCHMARKING
 #include "catch2/catch.hpp"
 
 #include "kirke/system_allocator.h"
@@ -17,11 +18,13 @@ class WordSearch__TestFixture {
         WordSearch__TestFixture(){
             system_allocator__initialize( &system_allocator, NULL );
 
-            grid = {
-                .width = GRID_DIM,
-                .height = GRID_DIM,
-                .entries = entries
-            };
+            word_search__grid__initialize( 
+                &grid,
+                system_allocator.allocator,
+                GRID_DIM,
+                GRID_DIM,
+                string__clone( &ENTRIES, system_allocator.allocator )
+            );
 
             array__string__initialize( &words, system_allocator.allocator, 8 );
             
@@ -34,12 +37,14 @@ class WordSearch__TestFixture {
         }
 
         ~WordSearch__TestFixture(){
+            word_search__grid__clear( &grid, system_allocator.allocator );
+
             system_allocator__deinitialize( &system_allocator );
         }
 
         const long GRID_DIM = 15;
 
-        String entries = {
+        String ENTRIES = {
             .data = (char[]) {
                 'U', 'M', 'K', 'H', 'U', 'L', 'K', 'I', 'N', 'V', 'J', 'O', 'C', 'W', 'E',
                 'L', 'L', 'S', 'H', 'K', 'Z', 'Z', 'W', 'Z', 'C', 'G', 'J', 'U', 'Y', 'G',
@@ -57,8 +62,8 @@ class WordSearch__TestFixture {
                 'W', 'Z', 'M', 'I', 'S', 'U', 'K', 'I', 'R', 'B', 'I', 'D', 'O', 'X', 'S',
                 'K', 'Y', 'L', 'B', 'Q', 'Q', 'R', 'M', 'D', 'F', 'C', 'W', 'E', 'A', 'B'
             },
-            .length = 175,
-            .capacity = 175,
+            .length = 225,
+            .capacity = 225,
             .element_size = 1
         };
 
@@ -81,7 +86,7 @@ class WordSearch__TestFixture {
         SystemAllocator system_allocator;
 };
 
-TEST_CASE_METHOD( WordSearch__TestFixture, "word_search__find_word_in_direction", "[word_search]" ){
+TEST_CASE_METHOD( WordSearch__TestFixture, "word_search__find_word_in_direction__brute_force", "[word_search]" ){
     String scotty = string__literal( "SCOTTY" );
     
     WordSearch__GridSequence expected_sequence = {
@@ -97,7 +102,7 @@ TEST_CASE_METHOD( WordSearch__TestFixture, "word_search__find_word_in_direction"
 
     WordSearch__GridSequence sequence;
     REQUIRE( 
-        word_search__find_word_in_direction( 
+        word_search__find_word_in_direction__brute_force( 
             &grid,
             &scotty,
             WordSearch__Direction__East,
@@ -109,7 +114,7 @@ TEST_CASE_METHOD( WordSearch__TestFixture, "word_search__find_word_in_direction"
 
     String does_not_exist = string__literal( "ABCDEFG" );
     REQUIRE_FALSE(
-        word_search__find_word_in_direction( 
+        word_search__find_word_in_direction__brute_force( 
             &grid,
             &does_not_exist,
             WordSearch__Direction__East,
@@ -118,7 +123,7 @@ TEST_CASE_METHOD( WordSearch__TestFixture, "word_search__find_word_in_direction"
     );
 }
 
-TEST_CASE_METHOD( WordSearch__TestFixture, "word_search__search_in_direction__east", "[word_search]" ){
+TEST_CASE_METHOD( WordSearch__TestFixture, "word_search__search_in_direction__brute_force__east", "[word_search]" ){
     unsigned long word_index;
 
     WordSearch__Solution expected_solutions[] = {
@@ -179,7 +184,7 @@ TEST_CASE_METHOD( WordSearch__TestFixture, "word_search__search_in_direction__ea
 
     // Test whether expected solution is found
     REQUIRE( 
-        word_search__search_in_direction( 
+        word_search__search_in_direction__brute_force( 
             &words,
             &grid,
             WordSearch__Direction__East,
@@ -204,7 +209,7 @@ TEST_CASE_METHOD( WordSearch__TestFixture, "word_search__search_in_direction__ea
     array__word_search__solution__initialize( &solutions, system_allocator.allocator, 1 );
 
     REQUIRE_FALSE( 
-        word_search__search_in_direction( 
+        word_search__search_in_direction__brute_force( 
             &words,
             &grid,
             WordSearch__Direction__East,
@@ -214,7 +219,7 @@ TEST_CASE_METHOD( WordSearch__TestFixture, "word_search__search_in_direction__ea
 
     // Test whether parameter solutions == NULL returns 0
     REQUIRE_FALSE(
-        word_search__search_in_direction( 
+        word_search__search_in_direction__brute_force( 
             &words,
             &grid,
             WordSearch__Direction__East,
@@ -417,7 +422,13 @@ TEST_CASE_METHOD( WordSearch__TestFixture, "word_search__search", "[word_search]
     Array__WordSearch__Solution solutions;
     array__word_search__solution__initialize( &solutions, system_allocator.allocator, words.length );
 
-    REQUIRE( word_search__search( &words, &grid, &solutions ) );
+    BENCHMARK( "word_search__search" ) {
+        return word_search__search( &words, &grid, &solutions );
+    };
+
+    BENCHMARK( "word_search__search__bruteforce" ) {
+        return word_search__search__brute_force( &words, &grid, &solutions );
+    };
 
     for( unsigned long solution_index = 0; solution_index < words.length; solution_index++ ){
         REQUIRE( 
