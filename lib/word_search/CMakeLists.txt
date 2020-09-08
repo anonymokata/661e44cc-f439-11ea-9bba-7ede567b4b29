@@ -37,17 +37,21 @@ set_target_properties(
 )
 if( BUILD_TESTS )
 
-    target_link_libraries(
-        libword_search
-        PRIVATE
-        gcov
-    )
+    if( BUILD_COVERAGE_REPORT )
 
-    set_target_properties(
-        libword_search
-        PROPERTIES
-        COMPILE_FLAGS "--coverage"
-    )
+        target_link_libraries(
+            libword_search
+            PRIVATE
+            gcov
+        )
+
+        set_target_properties(
+            libword_search
+            PROPERTIES
+            COMPILE_FLAGS "--coverage"
+        )
+
+    endif( BUILD_COVERAGE_REPORT )
 
     # "catch2__" methods defined in project/3rdParty/Catch2/CMakeLists.txt
 

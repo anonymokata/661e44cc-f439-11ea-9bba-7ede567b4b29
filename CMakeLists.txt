@@ -6,6 +6,12 @@ option( BUILD_TESTS "Build tests with project." OFF )
 option( BUILD_COVERAGE_REPORT "Build test coverage report with project and tests." OFF )
 option( BUILD_DOCUMENTATION "Build project documentation." OFF )
 
+if( CMAKE_CXX_COMPILER_ID STREQUAL "Clang" )
+    set( BUILD_COVERAGE_REPORT OFF CACHE BOOL "Disabled BUILD_COVERAGE_REPORT because compiler is Clang" )
+    message( "CLANG: BUILD_COVERAGE_REPORT: ${BUILD_COVERAGE_REPORT}" )
+endif( CMAKE_CXX_COMPILER_ID STREQUAL "Clang" )
+
+
 project( kata_word_search )
 
 set( CMAKE_C_STANDARD 11 )
