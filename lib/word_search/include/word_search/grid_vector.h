@@ -1,3 +1,7 @@
+/**
+ *  \file word_search/grid_vector.h
+ */
+
 #ifndef WORD_SEARCH__GRID_VECTOR__H
 #define WORD_SEARCH__GRID_VECTOR__H
 
@@ -13,9 +17,6 @@
 BEGIN_DECLARATIONS
 
 /**
- *  \file word_search/grid_vector.h
- *  \addtogroup word_search Word Search
- *  @{
  *  \defgroup word_search__grid_vector WordSearch__GridVector
  *  @{
  */
@@ -44,7 +45,6 @@ bool word_search__grid_vector__equals(
 
 /**
  *  @} // group word_search__grid_vector
- *  @} // group word_search
  */
 
 END_DECLARATIONS

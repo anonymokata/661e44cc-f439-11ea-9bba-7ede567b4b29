@@ -18,13 +18,17 @@ class WordSearch__UserStories__TestFixture{
         WordSearch__UserStories__TestFixture(){
             system_allocator__initialize( &system_allocator, NULL );
 
+            String* entries = string__clone( &ENTRIES, system_allocator.allocator );
+
             word_search__grid__initialize( 
                 &grid,
                 system_allocator.allocator,
                 GRID_DIM,
                 GRID_DIM,
-                string__clone( &ENTRIES, system_allocator.allocator )
+                entries
             );
+
+            allocator__free( system_allocator.allocator, entries );
         }
 
         ~WordSearch__UserStories__TestFixture(){
@@ -52,30 +56,13 @@ class WordSearch__UserStories__TestFixture{
                 'W', 'Z', 'M', 'I', 'S', 'U', 'K', 'I', 'R', 'B', 'I', 'D', 'O', 'X', 'S',
                 'K', 'Y', 'L', 'B', 'Q', 'Q', 'R', 'M', 'D', 'F', 'C', 'W', 'E', 'A', 'B'
             },
-            .length = GRID_DIM * GRID_DIM,
-            .capacity = GRID_DIM * GRID_DIM,
+            .length = 225,
+            .capacity = 225,
             .element_size = 1
         };
 
-        Array__String words = {
-            .data = (String*) (const String[]) {
-                string__literal( "SCOTTY" ),
-                string__literal( "SPOCK" ),
-                string__literal( "BONES" ),
-                string__literal( "UHURA" ),
-                string__literal( "KIRK" ),
-                string__literal( "SULU" ),
-                string__literal( "KHAN" ),
-                string__literal( "WORF" )
-            },
-            .length = 8,
-            .capacity = 8,
-            .element_size = sizeof( String )
-        };
-
-        WordSearch__Grid grid;
-
         SystemAllocator system_allocator;
+        WordSearch__Grid grid;
 };
 
 SCENARIO_METHOD( 

@@ -1,3 +1,7 @@
+/**
+ *  \file word_search/grid_coordinates.h
+ */
+
 #ifndef WORD_SEARCH__GRID_COORDINATES__H
 #define WORD_SEARCH__GRID_COORDINATES__H
 
@@ -14,9 +18,6 @@
 BEGIN_DECLARATIONS
 
 /**
- *  \file word_search/grid_coordinates.h
- *  \addtogroup word_search Word Search
- *  @{
  *  \defgroup word_search__grid_coordinates WordSearch__GridCoordinates
  *  @{
  */
@@ -63,7 +64,6 @@ WordSearch__GridCoordinates word_search__grid_coordinates__translate(
 
 /**
  *  @} // group word_search__grid_coordinates
- *  @} // group word_search
  */
 
 END_DECLARATIONS

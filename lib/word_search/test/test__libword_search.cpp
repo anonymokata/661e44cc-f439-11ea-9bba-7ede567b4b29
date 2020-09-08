@@ -2,7 +2,6 @@
 #include <string.h>
 
 // 3rdParty Includes
-#define CATCH_CONFIG_ENABLE_BENCHMARKING
 #include "catch2/catch.hpp"
 
 #include "kirke/system_allocator.h"
@@ -18,13 +17,17 @@ class WordSearch__TestFixture {
         WordSearch__TestFixture(){
             system_allocator__initialize( &system_allocator, NULL );
 
+            String* entries = string__clone( &ENTRIES, system_allocator.allocator );
+
             word_search__grid__initialize( 
                 &grid,
                 system_allocator.allocator,
                 GRID_DIM,
                 GRID_DIM,
-                string__clone( &ENTRIES, system_allocator.allocator )
+                entries
             );
+
+            allocator__free( system_allocator.allocator, entries );
 
             array__string__initialize( &words, system_allocator.allocator, 8 );
             
@@ -37,6 +40,7 @@ class WordSearch__TestFixture {
         }
 
         ~WordSearch__TestFixture(){
+            array__string__clear( &words, system_allocator.allocator );
             word_search__grid__clear( &grid, system_allocator.allocator );
 
             system_allocator__deinitialize( &system_allocator );
@@ -422,13 +426,7 @@ TEST_CASE_METHOD( WordSearch__TestFixture, "word_search__search", "[word_search]
     Array__WordSearch__Solution solutions;
     array__word_search__solution__initialize( &solutions, system_allocator.allocator, words.length );
 
-    BENCHMARK( "word_search__search" ) {
-        return word_search__search( &words, &grid, &solutions );
-    };
-
-    BENCHMARK( "word_search__search__bruteforce" ) {
-        return word_search__search__brute_force( &words, &grid, &solutions );
-    };
+    REQUIRE( word_search__search( &words, &grid, &solutions ) );
 
     for( unsigned long solution_index = 0; solution_index < words.length; solution_index++ ){
         REQUIRE( 
@@ -438,4 +436,6 @@ TEST_CASE_METHOD( WordSearch__TestFixture, "word_search__search", "[word_search]
             )
         );
     }
+
+    array__word_search__solution__clear( &solutions, system_allocator.allocator );
 }

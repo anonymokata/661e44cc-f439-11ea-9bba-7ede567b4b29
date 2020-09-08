@@ -1,3 +1,6 @@
+/**
+ *  \file word_search/direction.h
+ */
 #ifndef WORD_SEARCH__DIRECTION__H
 #define WORD_SEARCH__DIRECTION__H
 
@@ -7,9 +10,6 @@
 BEGIN_DECLARATIONS
 
 /**
- *  \file word_search/direction.h
- *  \addtogroup word_search Word Search
- *  @{
  *  \defgroup word_search__direction WordSearch__Direction
  *  @{
  */
@@ -44,6 +44,11 @@ typedef enum WordSearch__Direction {
     WordSearch__Direction__COUNT
 } WordSearch__Direction;
 
+/**
+ *  \brief This method returns the WordSearch__Direction opposite to the specified direction.
+ *  \param direction The direction for which the opposite direction is desired.
+ *  \returns the WordSearch__Direction opposite to \p direction.
+ */
 WordSearch__Direction word_search__direction__opposite( WordSearch__Direction direction );
 
 /*

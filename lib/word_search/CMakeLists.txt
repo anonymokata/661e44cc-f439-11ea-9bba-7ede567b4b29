@@ -30,6 +30,11 @@ target_compile_options(
     $<$<CXX_COMPILER_ID:MSVC>:/W4>
 )
 
+set_target_properties(
+    libword_search
+    PROPERTIES 
+    OUTPUT_NAME word_search
+)
 if( BUILD_TESTS )
 
     target_link_libraries(
@@ -80,6 +85,12 @@ if( BUILD_TESTS )
     catch2__add_test(
         NAME test__libword_search
         SOURCES "${libword_search__DIR}/test/test__libword_search.cpp"
+        LINK_LIBRARIES libword_search
+    )
+
+    catch2__add_test(
+        NAME test__libword_search__performance
+        SOURCES "${libword_search__DIR}/test/test__libword_search__performance.cpp"
         LINK_LIBRARIES libword_search
     )
 

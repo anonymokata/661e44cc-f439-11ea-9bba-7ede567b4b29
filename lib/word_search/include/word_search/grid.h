@@ -1,3 +1,7 @@
+/**
+ *  \file word_search/word_search__grid.h
+ */
+
 #ifndef WORD_SEARCH__GRID__H
 #define WORD_SEARCH__GRID__H
 
@@ -15,9 +19,6 @@
 BEGIN_DECLARATIONS
 
 /**
- *  \file word_search/word_search__grid.h
- *  \addtogroup word_search Word Search
- *  @{
  *  \defgroup word_search__grid WordSearch__Grid
  *  @{
  */
@@ -54,8 +55,23 @@ typedef struct WordSearch__Grid {
     Array__WordSearch__GridCoordinates *entry_coordinates_by_value[ 26 ];
 } WordSearch__Grid;
 
+/**
+ *  \brief This method initializes a WordSearch__Grid structure.
+ *  \param grid A pointer to the WordSearch__Grid structure to be initialized.
+ *  \param allocator A pointer to the allocator which will be used to allocate memory used by the WordSearch__Grid structure.
+ *  \param width The width of the grid, in entries
+ *  \param height The height of the grid, in entries
+ *  \param A pointer to a String containing the grid entries. The underlying data of this string is now owned by the WordSearch__Grid
+ *  structure; this will be freed upon calling word_search__grid__clear. 
+ */
 void word_search__grid__initialize( WordSearch__Grid *grid, Allocator* allocator, long width, long height, String *entries );
 
+/**
+ *  \brief This method clears a previously initialized WordSearch__Grid structure.
+ *  \param grid A pointer to the WordSearch__Grid structure to be cleared.
+ *  \param allocator A pointer to the allocator which was used to initialize the WordSearch__Grid structure; this will also be used
+ *  to free memory controlled by the grid. 
+ */
 void word_search__grid__clear( WordSearch__Grid *grid, Allocator *allocator );
 
 /**
@@ -109,16 +125,28 @@ bool word_search__grid__sequence_matches_word(
     String const *word
 );
 
+/**
+ *  \brief This method returns an array of candidate coordinates which can be used to search the grid for the given word.
+ *  These coordinates are pulled from grid->entry_coordinates_by_value, and represent the grid coordinates of all occurrences 
+ *  of the least common character in the desired word.
+ *  \param grid A pointer to the grid which is to be searched for \p word.
+ *  \param word A pointer to a String containing the desired word.
+ *  \param candidates An out parameter, the address of a pointer to an Array__WordSearch__GridCoordinates. Upon completion, 
+ *  this will store a pointer to an array containing the grid coordinates of all occurrences of the least common character 
+ *  in \p word.
+ *  \param character_index An out parameter. Upon completion, this will store the index into \p word of the character value
+ *  corresponding to the array stored in \p out_candidates. The grid entry of all coordinates contained in \p out_coordinates 
+ *  have this value. 
+ */
 void word_search__grid__get_candidate_coordinates( 
     WordSearch__Grid const *grid, 
     String const *word, 
-    Array__WordSearch__GridCoordinates **candidates, 
-    unsigned long *candidate_character_index 
+    Array__WordSearch__GridCoordinates **out_candidates, 
+    unsigned long *out_candidate_character_index 
 );
 
 /*
  *  @} // group word_search__grid
- *  @} // group word_search
  */
 
 END_DECLARATIONS

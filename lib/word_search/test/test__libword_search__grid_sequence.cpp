@@ -60,6 +60,5 @@ TEST_CASE( "word_search__grid_sequence__coordinates_of", "[grid_sequence]" ){
     sequence.span.direction = WordSearch__Direction__SouthWest;
     expected_coordinates = (WordSearch__GridCoordinates) { .row = 1, .column = -1 };
     REQUIRE( word_search__grid_sequence__coordinates_of( &sequence, 1, &coordinates ) );
-
     REQUIRE_FALSE( word_search__grid_sequence__coordinates_of( &sequence, 2, &coordinates ) );
 } 

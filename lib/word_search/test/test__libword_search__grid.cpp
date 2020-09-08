@@ -16,13 +16,17 @@ class WordSearch__Grid__TestFixture {
         WordSearch__Grid__TestFixture(){
             system_allocator__initialize( &system_allocator, NULL );
 
+            String* entries = string__clone( &ENTRIES, system_allocator.allocator );
+
             word_search__grid__initialize( 
                 &grid,
                 system_allocator.allocator,
                 GRID_DIM,
                 GRID_DIM,
-                string__clone( &ENTRIES, system_allocator.allocator ) 
+                entries
             );
+
+            allocator__free( system_allocator.allocator, entries );
         }
 
         ~WordSearch__Grid__TestFixture(){
@@ -35,7 +39,7 @@ class WordSearch__Grid__TestFixture {
         const long GRID_DIM = 15;
 
         String ENTRIES = {
-            .data = (char[ 225 ]) {
+            .data = (char[]) {
                 'U', 'M', 'K', 'H', 'U', 'L', 'K', 'I', 'N', 'V', 'J', 'O', 'C', 'W', 'E',
                 'L', 'L', 'S', 'H', 'K', 'Z', 'Z', 'W', 'Z', 'C', 'G', 'J', 'U', 'Y', 'G',
                 'H', 'S', 'U', 'P', 'J', 'P', 'R', 'J', 'D', 'H', 'S', 'B', 'X', 'T', 'G',
@@ -57,20 +61,17 @@ class WordSearch__Grid__TestFixture {
             .element_size = 1
         };
 
-        Array__String words = {
-            .data = (String*) (const String[]) {
-                string__literal( "SCOTTY" ),
-                string__literal( "SPOCK" ),
-                string__literal( "BONES" ),
-                string__literal( "UHURA" ),
-                string__literal( "KIRK" ),
-                string__literal( "SULU" ),
-                string__literal( "KHAN" ),
-                string__literal( "WORF" )
-            },
-            .length = 8,
-            .capacity = 8,
-            .element_size = sizeof( String )
+        String WORDS[ 10 ] = {
+            string__literal( "SCOTTY" ),
+            string__literal( "SPOCK" ),
+            string__literal( "BONES" ),
+            string__literal( "UHURA" ),
+            string__literal( "KIRK" ),
+            string__literal( "SULU" ),
+            string__literal( "KHAN" ),
+            string__literal( "RIKER" ),
+            string__literal( "WORF" ),
+            string__literal( "ABCDEFG" )
         };
 
         WordSearch__Grid grid;
@@ -236,17 +237,6 @@ TEST_CASE_METHOD( WordSearch__Grid__TestFixture, "word_search__grid__sequence_ma
                 .direction = WordSearch__Direction__North
             }
         },
-        // WORF
-        {
-            .start = {
-                .row = 14,
-                .column = 11
-            },
-            .span = {
-                .magnitude = 4,
-                .direction = WordSearch__Direction__NorthEast
-            }
-        },
         // RIKER
         {
             .start = {
@@ -257,15 +247,26 @@ TEST_CASE_METHOD( WordSearch__Grid__TestFixture, "word_search__grid__sequence_ma
                 .magnitude = 5,
                 .direction = WordSearch__Direction__NorthEast
             } 
+        },
+        // WORF
+        {
+            .start = {
+                .row = 14,
+                .column = 11
+            },
+            .span = {
+                .magnitude = 4,
+                .direction = WordSearch__Direction__NorthEast
+            }
         }
     };
 
-    for( unsigned long word_index = 0; word_index < words.length; word_index++ ){
+    for( unsigned long word_index = 0; word_index < ELEMENT_COUNT( WORDS ) - 1; word_index++ ){
         REQUIRE( 
             word_search__grid__sequence_matches_word( 
                 &grid,
                 &sequences[ word_index ],
-                &words.data[ word_index ]
+                &WORDS[ word_index ]
             ) == 1
         );
     }

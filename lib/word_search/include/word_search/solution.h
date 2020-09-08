@@ -1,9 +1,9 @@
-#ifndef WORD_SEARCH__SOLUTION__H
-#define WORD_SEARCH__SOLUTION__H
-
 /**
  *  \file word_search/word_search__solution.h
  */
+
+#ifndef WORD_SEARCH__SOLUTION__H
+#define WORD_SEARCH__SOLUTION__H
 
 // System Includes
 #include <stdbool.h>
@@ -15,7 +15,7 @@
 // Internal Includes
 #include "word_search/grid_sequence.h"
 
-/*
+/**
  *  \defgroup word_search__solution WordSearch__Solution
  *  @{
  */

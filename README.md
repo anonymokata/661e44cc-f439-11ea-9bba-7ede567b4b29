@@ -5,11 +5,44 @@
 
 ## About
 
+This project is a word search puzzle solver. This was completed as part of an employment application to Accenture, located in Des Moines, IA. All internal source was written by Justin Kirkegaard. 
+
+This project relies heavily on open source software and tools. Acknowledgements to 
+
+* Build system using [CMake](https://cmake.org "CMake")
+* Unit testing using [Catch2](https://github.com/catchorg/Catch2/ "Catch2")
+* Code coverage reports using [LCOV](http://ltp.sourceforge.net/coverage/lcov.php "LCOV")
+* Documentation using [Doxygen](http://www.doxygen.nl "Doxygen")
+* [doxygen_dark_theme]( https://github.com/MaJerle/doxygen-dark-theme "doxygen_dark_theme" ) written by MaJerle 
+* Continuous Integration using [Travis.CI](https://travis-ci.org/ "Travis.CI" )
+
+It is likely that other open source software was used in this project but not acknowledged. If your work was used but not acknowledged and you would like it to be, or if you notice another's work which was not acknowledged, please open an issue on the [project's GitHub page]( https://github.com/this-kirke/kata-word-search "project's GitHub page" ) and I will address it as soon as possible.
+
 ## Building
+
+Building this project requires CMake version >= 3.12. Optional documentation generation requires Doxygen and dot. Code coverage requires and lcov and genhtml. Follow the following steps to build:
+
+1. Clone the repository:   `<project_root>$git clone https://github.com/this-kirke/kata-word-search.git`
+2. Update submodules:      `<project_root>$git submodule update --init --recursive`
+3. Generate the build:     `<project_root>$cmake -B build`
+4. Start the build:        `<project_root>$cmake --build build`
+5. Run the executable:     `<project_root>$build/exec/kata_word_search/kata_word_search data/sample_input.txt`
+
+Several build options are available, as defined in `<project_root>/CMakeLists.txt`. To enable these options, add -D<OPTION_NAME>=ON for each desired option in step 3.  For example the command `<project_root>$cmake -B build -DBUILD_TESTS=ON -DBUILD_COVERAGE_REPORT=ON -DBUILD_DOCUMENTATION=ON` will enable all options.
+
+By default, a static library will be built for libword_search. To produce a shared library, add `-DCMAKE_BUILD_TYPE=Shared` to the generate command (step 3).
+
+For convenience, there are tasks defined `<project_root>/.vscode`, which allow different configurations to be built as VSCode tasks. 
 
 ## Usage
 
+This project creates the executable target kata_word_search, located in <project_root>/build/exec/kata_word_search. This application accepts a word search puzzle in the format described below. This puzzle can either be piped to the application through stdin, or can be specified by the path to a file containing the puzzle as the first positional argument.  Try `kata_word_search --help` for more information.
+
+Additionally, this project creates the library target libword_search, located in <project_root>/build/lib/word_search.
+
 ## Testing
+
+Testing is accomplished using the Catch2 testing framework, which is included with the project source as a submodule. To enable testing, pass the -DBUILD_TESTS=ON option to the generate command (step 3) above. This will create the executable <project_root>/build/test__all, which will run all of the project's tests. This executable has many options, to see them run `<project_root>/build/test__all --help`.
 
 ## Instructions
 

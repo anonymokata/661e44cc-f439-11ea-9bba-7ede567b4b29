@@ -1,3 +1,7 @@
+/**
+ *  \file word_search/grid_sequence.h
+ */
+
 #ifndef WORD_SEARCH__GRID_SEQUENCE__H
 #define WORD_SEARCH__GRID_SEQUENCE__H
 
@@ -15,9 +19,6 @@
 BEGIN_DECLARATIONS
 
 /**
- *  \file word_search/grid_sequence.h
- *  \addtogroup word_search Word Search
- *  @{
  *  \defgroup word_search__grid_sequence WordSearch__GridSequence
  *  @{
  */
@@ -61,7 +62,6 @@ bool word_search__grid_sequence__coordinates_of( WordSearch__GridSequence const 
 
 /**
  *  @} // group word_search__grid_coordinates
- *  @} // group word_search
  */
 
 END_DECLARATIONS

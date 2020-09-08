@@ -15,8 +15,9 @@ void word_search__grid__initialize( WordSearch__Grid *grid, Allocator* allocator
     grid->width = width;
     grid->height = height;
     grid->entries = *entries;
-    memset( &grid->entry_coordinates_by_value, 0, sizeof( grid->entry_coordinates_by_value ) );
 
+    // Zero grid->entry_coordinates_by_value, so we can compare each element to NULL.
+    memset( &grid->entry_coordinates_by_value, 0, sizeof( grid->entry_coordinates_by_value ) );
     for( long row_index = 0; row_index < height; row_index++ ){
         for( long column_index = 0; column_index < width; column_index++ ){
             unsigned char array_index = word_search__grid__character_to_index( entries->data[ row_index * width + column_index ] );
@@ -47,6 +48,7 @@ void word_search__grid__clear( WordSearch__Grid *grid, Allocator *allocator ){
     for( unsigned long array_index = 0; array_index < ELEMENT_COUNT( grid->entry_coordinates_by_value ); array_index++ ){
         if( grid->entry_coordinates_by_value[ array_index ] != NULL ){
             array__word_search__grid_coordinates__clear( grid->entry_coordinates_by_value[ array_index ], allocator );
+            allocator__free( allocator, grid->entry_coordinates_by_value[ array_index ] );
         }
     }
 }

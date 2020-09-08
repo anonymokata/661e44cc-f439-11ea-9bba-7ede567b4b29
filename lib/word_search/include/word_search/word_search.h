@@ -24,7 +24,7 @@ BEGIN_DECLARATIONS
 typedef struct Allocator Allocator;
 typedef struct String String;
 
-/*
+/**
  *  \defgroup word_search Word Search
  *  @{
  */
@@ -57,12 +57,14 @@ bool word_search__search(
 
 /**
  *  \brief This method searches the grid in the given direction for the given word.
+ *  \deprecated This method is retained to enable completion of the user stories defined in test__libword_search__user_stories.cpp.
+ *  A much faster search algorithm is implemented in word_search__search and word_search__find_word.
  *  \param grid A pointer to the WordSearch__Grid in which to search.
  *  \param word A pointer a String containing the word to search for.
  *  \param direction The direction in which to search
  *  \param out_sequence An out parameter. If the desired word is located, this will store
  *  the sequence whose entries match the letters of \p word.  
- *  \returns true if the word was found, and false otherwise.
+ *  \returns true if the word was found, and false otherwise. 
  */
 bool word_search__find_word_in_direction__brute_force( 
     WordSearch__Grid const *grid, 
@@ -73,6 +75,8 @@ bool word_search__find_word_in_direction__brute_force(
 
 /**
  *  \brief Searches the given grid for the given words in the given direction.
+ *  \deprecated This method is retained to enable completion of the user stories defined in test__libword_search__user_stories.cpp.
+ *  A much faster search algorithm is implemented in word_search__search and word_search__find_word.
  *  \param words A pointer to an Array__String containing the list of the words to be found in the \p grid.
  *  \param grid The grid in which to search for the words contained in \p words.
  *  \param direction The direction in which to search.
@@ -90,6 +94,8 @@ bool word_search__search_in_direction__brute_force(
 
 /**
  *  \brief This method searches the grid for the given words, and returns a solution for each.
+ *  \deprecated This method is retained to enable completion of the user stories defined in test__libword_search__user_stories.cpp.
+ *  A much faster search algorithm is implemented in word_search__search and word_search__find_word.
  *  \param words A pointer to an Array__String containing the list of the words to be found in the \p grid.
  *  \param grid The grid in which to search for the words contained in \p words.
  *  \param out_solutions A pointer to a pre-allocated Array__WordSearch__Solution. The capacity should be equal to
